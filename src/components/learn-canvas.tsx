@@ -17,14 +17,30 @@ interface LearnCanvasProps {
 }
 
 export function LearnCanvas({ content, initialCode, chapterId, validation, nextChapterId }: LearnCanvasProps) {
-    const { markAsCompleted, isCompleted } = useProgress()
+    const { markAsCompleted, isCompleted, saveCode, getSavedCode } = useProgress()
     const router = useRouter()
     const [isSuccess, setIsSuccess] = React.useState(isCompleted(chapterId))
 
-    // Reset success state when chapter changes
+    // Determine the code to show: saved code > initialCode
+    const [currentCode, setCurrentCode] = React.useState(initialCode)
+
+    // Effect to load saved code on mount or chapter change
     React.useEffect(() => {
+        const saved = getSavedCode(chapterId)
+        if (saved) {
+            setCurrentCode(saved)
+        } else {
+            setCurrentCode(initialCode)
+        }
         setIsSuccess(isCompleted(chapterId))
-    }, [chapterId])
+    }, [chapterId, getSavedCode, initialCode, isCompleted])
+
+    // Save code when it changes (debouncing could be added here but keeping simple first)
+    const handleCodeChange = (newCode: string | undefined) => {
+        if (newCode !== undefined) {
+            saveCode(chapterId, newCode)
+        }
+    }
 
     const triggerSuccess = () => {
         setIsSuccess(true)
@@ -66,7 +82,9 @@ export function LearnCanvas({ content, initialCode, chapterId, validation, nextC
                 }
                 rightPanel={
                     <CodeEditor
-                        initialValue={initialCode}
+                        key={chapterId} // Force re-mount on chapter change to apply new initialValue
+                        initialValue={currentCode}
+                        onChange={handleCodeChange}
                         onValidate={(markers, code) => {
                             // 1. Check syntax errors
                             if (markers.length > 0) {
