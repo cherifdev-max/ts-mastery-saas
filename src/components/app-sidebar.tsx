@@ -2,12 +2,12 @@
 
 import * as React from "react"
 import { BookOpen, Code, Layers, Zap, Check } from "lucide-react"
-import Link from "next/link"
-import { useProgress } from "@/hooks/use-progress"
-
+import { modules } from "@/lib/content"
+import { Progress } from "@/components/ui/progress"
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -18,39 +18,29 @@ import {
     SidebarRail,
 } from "@/components/ui/sidebar"
 
-const data = {
-    modules: [
-        {
-            title: "Fondamentaux",
-            items: [
-                { title: "Chapitre 1 : Introduction & Env", url: "/learn/intro", icon: BookOpen, id: "intro" },
-                { title: "Chapitre 2 : Les types", url: "/learn/types", icon: Code, id: "types" },
-                { title: "Chapitre 3 : Fonctions", url: "/learn/functions", icon: Zap, id: "functions" },
-                { title: "Chapitre 4 : Classes", url: "/learn/classes", icon: Layers, id: "classes" },
-            ],
-        },
-        {
-            title: "Intermédiaire",
-            items: [
-                { title: "Chapitre 5 : Interfaces", url: "/learn/interfaces", icon: BookOpen, id: "interfaces" },
-                { title: "Chapitre 6 : Unions & Alias", url: "/learn/unions", icon: Code, id: "unions" },
-                { title: "Chapitre 7 : Génériques", url: "/learn/generics", icon: Zap, id: "generics" },
-            ],
-        },
-        {
-            title: "Avancé",
-            items: [
-                { title: "Chapitre 8 : Namespace & d.ts", url: "/learn/namespaces", icon: Layers, id: "namespaces" },
-                { title: "Chapitre 9 : Types Avancés", url: "/learn/advanced-types", icon: Code, id: "advanced-types" },
-                { title: "Chapitre 10 : Décorateurs", url: "/learn/decorators", icon: Zap, id: "decorators" },
-                { title: "Chapitre 11 : Migration JS vers TS", url: "/learn/migration", icon: BookOpen, id: "migration" },
-            ],
-        },
-    ],
-}
+import Link from "next/link"
+import { useProgress } from "@/hooks/use-progress"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { isCompleted } = useProgress()
+    const { isCompleted, completedChapters } = useProgress()
+
+    // Calculate progress
+    const progress = modules.length > 0 ? Math.round((completedChapters.length / modules.length) * 100) : 0
+
+    // Helper: Map content IDs to icons
+    const getIcon = (id: string) => {
+        if (["intro", "interfaces", "migration"].some(k => id.includes(k))) return BookOpen
+        if (["types", "unions", "advanced-types"].some(k => id.includes(k))) return Code
+        if (["classes", "namespaces"].some(k => id.includes(k))) return Layers
+        return Zap
+    }
+
+    // Helper: Group modules logically
+    const groups = [
+        { title: "Fondamentaux", items: modules.slice(0, 4) },
+        { title: "Intermédiaire", items: modules.slice(4, 7) },
+        { title: "Avancé", items: modules.slice(7) },
+    ]
 
     return (
         <Sidebar {...props}>
@@ -63,29 +53,41 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
             </SidebarHeader>
             <SidebarContent>
-                {data.modules.map((module) => (
-                    <SidebarGroup key={module.title}>
-                        <SidebarGroupLabel>{module.title}</SidebarGroupLabel>
+                {groups.map((group) => (
+                    <SidebarGroup key={group.title}>
+                        <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
-                                {module.items.map((item) => (
-                                    <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton asChild>
-                                            <Link href={item.url} className="flex justify-between w-full">
-                                                <div className="flex items-center gap-2">
-                                                    <item.icon />
-                                                    <span>{item.title}</span>
-                                                </div>
-                                                {isCompleted(item.id) && <Check className="h-4 w-4 text-green-500" />}
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
-                                ))}
+                                {group.items.map((item) => {
+                                    const Icon = getIcon(item.id)
+                                    return (
+                                        <SidebarMenuItem key={item.id}>
+                                            <SidebarMenuButton asChild isActive={false}>
+                                                <Link href={`/learn/${item.id}`} className="flex justify-between w-full">
+                                                    <div className="flex items-center gap-2">
+                                                        <Icon />
+                                                        <span>{item.title}</span>
+                                                    </div>
+                                                    {isCompleted(item.id) && <Check className="h-4 w-4 text-green-500" />}
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    )
+                                })}
                             </SidebarMenu>
                         </SidebarGroupContent>
                     </SidebarGroup>
                 ))}
             </SidebarContent>
+            <SidebarFooter className="p-4">
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
+                        <span>Progression</span>
+                        <span>{progress}%</span>
+                    </div>
+                    <Progress value={progress} className="h-2" />
+                </div>
+            </SidebarFooter>
             <SidebarRail />
         </Sidebar>
     )

@@ -6,6 +6,7 @@ import { CourseViewer } from "@/components/course-viewer"
 import { CodeEditor } from "@/components/code-editor"
 import { useProgress } from "@/hooks/use-progress"
 import { useRouter } from "next/navigation"
+import confetti from "canvas-confetti"
 
 interface LearnCanvasProps {
     content: string
@@ -24,6 +25,17 @@ export function LearnCanvas({ content, initialCode, chapterId, validation, nextC
     React.useEffect(() => {
         setIsSuccess(isCompleted(chapterId))
     }, [chapterId])
+
+    const triggerSuccess = () => {
+        setIsSuccess(true)
+        markAsCompleted(chapterId)
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        })
+        alert("Bravo ! Exercice validé. 🚀")
+    }
 
     return (
         <div className="h-screen pt-4 relative">
@@ -75,9 +87,7 @@ export function LearnCanvas({ content, initialCode, chapterId, validation, nextC
                             }
 
                             if (isValid) {
-                                setIsSuccess(true)
-                                markAsCompleted(chapterId)
-                                alert("Bravo ! Exercice validé. 🚀")
+                                triggerSuccess()
                             } else {
                                 alert(`Validation échouée : ${validation.message}`)
                             }
