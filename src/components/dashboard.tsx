@@ -2,22 +2,19 @@
 
 import * as React from "react"
 import { useProgress } from "@/hooks/use-progress"
-import { modules } from "@/lib/content"
+import { courses } from "@/lib/content"
 import Link from "next/link"
-import { Check, Lock, Play, Trophy } from "lucide-react"
+import { Trophy, ArrowRight, Play } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 
 export function Dashboard() {
     const { completedChapters } = useProgress()
 
-    // Calculate progress
-    const totalChapters = modules.length
+    // Overall Progress across ALL courses for the Hero stats
+    const totalModules = courses.reduce((acc, c) => acc + c.modules.length, 0)
     const completedCount = completedChapters.length
-    const progressPercentage = Math.round((completedCount / totalChapters) * 100)
-
-    // Determine next chapter to specificy action button
-    const firstIncomplete = modules.find(m => !completedChapters.includes(m.id))
+    const globalProgress = totalModules > 0 ? Math.round((completedCount / totalModules) * 100) : 0
 
     return (
         <div className="p-8 max-w-6xl mx-auto space-y-12 animate-in fade-in duration-700">
@@ -28,87 +25,79 @@ export function Dashboard() {
                 <div className="space-y-4 relative z-10 max-w-2xl">
                     <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mb-2">
                         <Trophy className="w-3 h-3 mr-2" />
-                        De Zéro à Expert
+                        Rise Up Academy
                     </div>
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-                        Bon retour, <span className="text-primary">Apprenti</span>.
+                        Formez-vous aux <span className="text-primary">technologies modernes</span>.
                     </h1>
                     <p className="text-lg text-muted-foreground">
-                        Vous avez complété <strong className="text-foreground">{completedCount}</strong> sur <strong className="text-foreground">{totalChapters}</strong> chapitres.
-                        Continuez votre ascension vers la maîtrise de TypeScript.
+                        TypeScript, Java, Spring Boot, et Angular. Une plateforme unique pour maîtriser la stack complète.
                     </p>
-
-                    {firstIncomplete && (
-                        <div className="pt-4">
-                            <Link
-                                href={`/learn/${firstIncomplete.id}`}
-                                className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary/90 transition-all hover:scale-105 active:scale-95"
-                            >
-                                <Play className="w-5 h-5 mr-2 fill-current" />
-                                Continuer : {firstIncomplete.title}
-                            </Link>
-                        </div>
-                    )}
                 </div>
 
-                {/* Circular Progress (Visual only for now, using linear accessible one below) */}
                 <div className="relative z-10 flex flex-col items-center justify-center bg-card p-6 rounded-2xl border shadow-sm w-full md:w-auto min-w-[200px]">
-                    <div className="text-5xl font-black text-primary mb-2">{progressPercentage}%</div>
-                    <Progress value={progressPercentage} className="h-2 w-full mb-2" />
-                    <span className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">Progression Globale</span>
+                    <div className="text-5xl font-black text-primary mb-2">{globalProgress}%</div>
+                    <Progress value={globalProgress} className="h-2 w-full mb-2" />
+                    <span className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">Maîtrise Globale</span>
                 </div>
             </div>
 
-            {/* Modules Grid */}
+            {/* Course Catalog Grid */}
             <div className="space-y-6">
-                <h2 className="text-2xl font-bold tracking-tight">Votre Parcours</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {modules.map((module, index) => {
-                        const isCompleted = completedChapters.includes(module.id)
-                        const isLocked = !isCompleted && index > 0 && !completedChapters.includes(modules[index - 1].id)
+                <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+                    <div className="h-8 w-1 bg-primary rounded-full"></div>
+                    Catalogue de Formation
+                </h2>
 
-                        // Special logic: First chapter is always unlocked
-                        const canAccess = index === 0 || isCompleted || completedChapters.includes(modules[index - 1].id)
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {courses.map((course) => {
+                        // Calculate course specific progress
+                        const courseModuleIds = course.modules.map(m => m.id)
+                        const courseCompletedCount = courseModuleIds.filter(id => completedChapters.includes(id)).length
+                        const courseTotal = courseModuleIds.length
+                        const courseProgress = courseTotal > 0 ? Math.round((courseCompletedCount / courseTotal) * 100) : 0
+
+                        const firstModuleUrl = `/learn/${course.modules[0].id}`
 
                         return (
                             <Link
-                                key={module.id}
-                                href={canAccess ? `/learn/${module.id}` : "#"}
-                                className={cn(
-                                    "group relative flex flex-col p-6 bg-card rounded-xl border transition-all duration-300",
-                                    canAccess ? "hover:shadow-md hover:border-primary/50 cursor-pointer" : "opacity-50 cursor-not-allowed grayscale-[0.5]"
-                                )}
+                                key={course.id}
+                                href={firstModuleUrl}
+                                className="group relative flex flex-col bg-card rounded-2xl border hover:border-primary/50 hover:shadow-xl transition-all duration-300 overflow-hidden"
                             >
-                                <div className="flex items-start justify-between mb-4">
-                                    <div className={cn(
-                                        "w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold",
-                                        isCompleted ? "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"
-                                    )}>
-                                        {index + 1}
-                                    </div>
-                                    {isCompleted ? (
-                                        <div className="bg-green-500 text-white rounded-full p-1">
-                                            <Check className="w-4 h-4" />
+                                {/* Course Banner with Image */}
+                                <div className="h-48 w-full relative overflow-hidden">
+                                    {/* Background Image with Overlay */}
+                                    <div
+                                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                        style={{ backgroundImage: `url(${course.image})` }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
+
+                                    <div className="absolute bottom-4 left-4 flex items-center gap-3">
+                                        <div className="bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/20 shadow-lg">
+                                            <course.icon className="w-6 h-6 text-white" />
                                         </div>
-                                    ) : !canAccess ? (
-                                        <Lock className="w-5 h-5 text-muted-foreground" />
-                                    ) : null}
+                                        <h3 className="font-bold text-xl text-white shadow-sm">{course.title}</h3>
+                                    </div>
                                 </div>
 
-                                <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
-                                    {module.title}
-                                </h3>
+                                <div className="p-6 flex flex-col flex-1">
+                                    <p className="text-sm text-muted-foreground mb-6 line-clamp-2">{course.description}</p>
 
-                                {/* We could extract description from content but simpler to have hardcoded snippet or just title for now */}
-                                <p className="text-sm text-muted-foreground line-clamp-2">
-                                    {module.content.substring(0, 100).replace(/#/g, '')}...
-                                </p>
+                                    <div className="mt-auto space-y-4">
+                                        <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
+                                            <span>{courseCompletedCount} / {courseTotal} Chapitres</span>
+                                            <span>{courseProgress}%</span>
+                                        </div>
+                                        <Progress value={courseProgress} className="h-1.5" />
 
-                                {canAccess && !isCompleted && (
-                                    <div className="mt-auto pt-4 flex items-center text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                                        Commencer <span className="ml-1 transition-transform group-hover:translate-x-1">&rarr;</span>
+                                        <div className="pt-2 flex items-center text-sm font-semibold text-primary">
+                                            {courseProgress === 100 ? "Réviser" : courseProgress > 0 ? "Continuer" : "Commencer"}
+                                            {courseProgress > 0 ? <Play className="ml-2 w-4 h-4 fill-current" /> : <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />}
+                                        </div>
                                     </div>
-                                )}
+                                </div>
                             </Link>
                         )
                     })}

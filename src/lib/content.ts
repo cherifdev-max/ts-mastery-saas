@@ -1,4 +1,29 @@
-export const modules = [
+import { BookOpen, Code, Layers, Zap, Database, Server, Smartphone } from "lucide-react"
+
+export interface ValidationRule {
+    type: "regex" | "includes"
+    value: string
+    message: string
+}
+
+export interface Module {
+    id: string
+    title: string
+    content: string
+    validation: ValidationRule
+}
+
+export interface Course {
+    id: string
+    title: string
+    description: string
+    image: string // For visual cards, can be a color gradient or image path
+    icon: any
+    modules: Module[]
+}
+
+// Reuse existing TS content
+const tsModules: Module[] = [
     {
         id: "intro",
         title: "Chapitre 1 : Introduction & Env",
@@ -108,17 +133,98 @@ export const modules = [
             value: "// EXPERT",
             message: "Écrivez le commentaire // EXPERT pour finir."
         }
-    },
+    }
 ]
+
+// Define Courses
+export const courses: Course[] = [
+    {
+        id: "typescript",
+        title: "TypeScript Mastery",
+        description: "De Zéro à Expert : Maîtrisez le sur-ensemble typé de JavaScript.",
+        image: "/images/ts.png",
+        icon: Code,
+        modules: tsModules
+    },
+    {
+        id: "java",
+        title: "Java Fundamentals",
+        description: "Apprenez le langage orienté objet le plus utilisé en entreprise.",
+        image: "/images/java.png",
+        icon: Server,
+        modules: [
+            {
+                id: "java-intro",
+                title: "Chapitre 1 : Hello Java",
+                content: "# Introduction à Java\n\nJava est un langage robuste et orienté objet.\n\n### Exercice\nCréez une classe `Main` avec une méthode `main`.",
+                validation: {
+                    type: "includes",
+                    value: "class Main",
+                    message: "Définissez une classe 'Main'."
+                }
+            }
+        ]
+    },
+    {
+        id: "springboot",
+        title: "Spring Boot Starter",
+        description: "Créez des API REST puissantes rapidement avec Spring Boot.",
+        image: "/images/spring.png",
+        icon: Database,
+        modules: [
+            {
+                id: "spring-intro",
+                title: "Chapitre 1 : Votre première API",
+                content: "# Spring Boot\n\nLe framework Java n°1 pour le web.\n\n### Exercice\nAnnotez une classe avec `@SpringBootApplication`.",
+                validation: {
+                    type: "includes",
+                    value: "@SpringBootApplication",
+                    message: "Utilisez l'annotation @SpringBootApplication."
+                }
+            }
+        ]
+    },
+    {
+        id: "angular",
+        title: "Angular Architecture",
+        description: "Le framework Google pour des applications web scalables.",
+        image: "/images/angular.png",
+        icon: Smartphone, // Closest simple icon for App/Frontend
+        modules: [
+            {
+                id: "angular-intro",
+                title: "Chapitre 1 : Composants",
+                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
+                validation: {
+                    type: "includes",
+                    value: "@Component",
+                    message: "Utilisez le décorateur @Component."
+                }
+            }
+        ]
+    }
+]
+
+// Compatibility export for existing code using 'modules'
+// Flatten all modules for simple 'find by ID' lookups
+export const modules = courses.flatMap(c => c.modules)
 
 export function getModule(id: string) {
     return modules.find(m => m.id === id)
 }
 
 export function getNextModule(currentId: string) {
-    const index = modules.findIndex(m => m.id === currentId)
-    if (index !== -1 && index < modules.length - 1) {
-        return modules[index + 1]
+    // Find which course the module belongs to
+    const course = courses.find(c => c.modules.some(m => m.id === currentId))
+    if (!course) return null
+
+    const index = course.modules.findIndex(m => m.id === currentId)
+    if (index !== -1 && index < course.modules.length - 1) {
+        return course.modules[index + 1]
     }
     return null
+}
+
+export function getCourseByModuleId(moduleId: string) {
+    return courses.find(c => c.modules.some(m => m.id === moduleId))
 }
