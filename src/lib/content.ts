@@ -284,6 +284,16 @@ export const courses: Course[] = [
             value: "Optional.of",
                 message: "Utilisez `Optional.of(...)`."
     }
+},
+{
+    id: "java-async",
+        title: "14. Async & CompletableFuture",
+            content: "# 🚀 Programmation Asynchrone\n\n## C'est quoi, Asynchrone ?\n- **Synchrone** : Attendre le gâteau devant le four. 🐢\n- **Asynchrone** : Faire la vaisselle en attendant que ça cuise. ⚡️\n\n## L'outil : `CompletableFuture`\nC'est une promesse de résultat futur.\n\n### supplyAsync\n```java\nCompletableFuture.supplyAsync(() -> {\n    // Simulation tâche longue\n    return \"Gateau prêt\";\n});\n```\n\n### Chaîner avec `thenApply`\n```java\nfuture.thenApply(g -> g + \" décoré\");\n```\n\n### Combiner avec `allOf`\nAttendre que le riz, le poulet et les légumes soient cuits.\n\n### Exercice\nUtilisez `CompletableFuture.supplyAsync`.",
+                validation: {
+        type: "regex",
+            value: "CompletableFuture\\.supplyAsync",
+                message: "Utilisez `CompletableFuture.supplyAsync`."
+    }
 }
         ]
     },
