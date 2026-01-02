@@ -234,7 +234,58 @@ export const courses: Course[] = [
             message: "Utilisez `.stream().filter(...)`."
         }
     }
-]
+            },
+{
+    id: "java-21-threads",
+        title: "9. Java 21 : Threads Virtuels",
+            content: "# 🚀 Java 21 : Les Threads Virtuels\n\n## L'Analogie des Livreurs 📦\nImaginez une entreprise de livraison.\n- **Camions** (Platform Threads) : Limités, coûteux.\n- **Livreurs** (Virtual Threads) : Illimités, légers.\n\nAvec les threads virtuels, quand un livreur attend une réponse (bloquant), il descend du camion. Le camion sert à quelqu'un d'autre. Résultat : On peut gérer des millions de tâches simultanées !\n\n### Code Non-Bloquant\n```java\nThread.ofVirtual().start(() -> {\n    System.out.println(\"Je suis ultra-léger !\");\n});\n```\n\n### Exercice\nLancez un thread avec `Thread.ofVirtual().start(...)`.",
+                validation: {
+        type: "regex",
+            value: "Thread\\.ofVirtual\\(\\)\\.start",
+                message: "Utilisez `Thread.ofVirtual().start(...)`."
+    }
+},
+{
+    id: "java-21-patterns",
+        title: "10. Java 21 : Pattern Matching",
+            content: "# 🧐 Pattern Matching & Records\n\n## Le Triage Intelligent\nFinis les casts complexes !\n\n### Avant (Java < 16)\n```java\nif (obj instanceof String) {\n    String s = (String) obj;\n    return s.length();\n}\n```\n\n### Après (Pattern Matching)\n```java\nif (obj instanceof String s) {\n    return s.length();\n}\n```\n\n### Record Patterns\nSi vous avez un record `Person(String name, int age)` :\n```java\nif (obj instanceof Person(String name, int age)) {\n    return name.toUpperCase();\n}\n```\n\n### Exercice\nUtilisez le pattern matching : `if (obj instanceof String s)`.",
+                validation: {
+        type: "regex",
+            value: "instanceof\\s+[a-zA-Z0-9_]+\\s+[a-zA-Z0-9_]+",
+                message: "Utilisez la syntaxe `instanceof Type variable`."
+    }
+},
+{
+    id: "java-21-collections",
+        title: "11. Java 21 : Collections Unified",
+            content: "# 📚 Collections Séquencées\n\n## Un Annuaire Unifié\nAvant Java 21, récupérer le premier élément dépendait du type de liste (`get(0)`, `first()`, `getFirst()`, etc.).\n\nMaintenant, l'interface `SequencedCollection` unifie tout !\n\n### Méthodes Universelles\n- `getFirst()` / `getLast()`\n- `addFirst()` / `addLast()`\n- `removeFirst()` / `removeLast()`\n\n```java\nSequencedCollection<String> list = new ArrayList<>();\nlist.addFirst(\"Premier !\");\n```\n\n### Exercice\nAppelez la méthode `.getFirst()` sur une collection.",
+                validation: {
+        type: "regex",
+            value: "\\.getFirst\\(\\)",
+                message: "Utilisez la méthode `.getFirst()`."
+    }
+},
+{
+    id: "java-advanced",
+        title: "12. Java Avancé",
+            content: "# 📜 Fonctionnalités Avancées\n\n> 🎬 **[Vidéo Récapitulative](https://drive.google.com/file/d/1o-bEyyDgIbMLw0fcCBmwE4jYJmF64Z1B/view?usp=sharing)**\n\n## 1. Génériques Avancés\nCréez des boîtes typées : `Box<T>`. Évitez les erreurs de cast !\n\n## 2. Records 📦\nRaccourcis pour objets immuables : `public record Person(String name) {}`.\nDites adieu aux getters/setters/equals/hashCode infinis.\n\n## 3. Interfaces Scellées (Sealed)\nContrôlez qui peut hériter de vos classes : `sealed interface Shape permits Circle, Square`.\n\n## 4. Optional\nUne boîte qui peut être vide. Forcez la gestion du cas \"absent\" sans `NullPointerException`.\n\n### Exercice\nDéclarez un record : `record Point(int x, int y) {}`.",
+                validation: {
+        type: "regex",
+            value: "record\\s+[a-zA-Z0-9_]+\\(.*\\)",
+                message: "Déclarez un record, par exemple `record Point(int x, int y) {}`."
+    }
+},
+{
+    id: "java-functional",
+        title: "13. Penser Fonctionnel",
+            content: "# 🧘 Penser Fonctionnel en Java\n\n> 🎬 **[Vidéo : Penser Fonctionnel](https://drive.google.com/file/d/19pd_2wBztm-SAB1mmrfca3HxvaSSNfib/view?usp=sharing)**\n\n## Le Paradigme Fonctionnel\nFocalisez-vous sur le **QUOI** (transformations) plutôt que le **COMMENT** (boucles).\n\n## Fonctions Pures\nComme une calculatrice parfaite : `2+2` fait toujours `4`. Pas d'effets de bord (pas de println, pas de modif de variable globale).\n\n## Monades\nDes boîtes magiques (`Optional`, `Stream`, `CompletableFuture`) pour chainer des opérations (`flatMap`) en toute sécurité.\n\n### Exercice\nCréez un Optional : `Optional.of(\"Java\")`.",
+                validation: {
+        type: "includes",
+            value: "Optional.of",
+                message: "Utilisez `Optional.of(...)`."
+    }
+}
+        ]
     },
 {
     id: "springboot",
