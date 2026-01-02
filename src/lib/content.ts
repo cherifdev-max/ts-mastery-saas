@@ -303,36 +303,126 @@ export const courses: Course[] = [
         icon: Database,
         modules: [
             {
-                id: "spring-intro",
-                title: "Chapitre 1 : Votre première API",
-                content: "# Spring Boot\n\nLe framework Java n°1 pour le web.\n\n### Exercice\nAnnotez une classe avec `@SpringBootApplication`.",
-                validation: {
-                    type: "includes",
-                    value: "@SpringBootApplication",
-                    message: "Utilisez l'annotation @SpringBootApplication."
+                id: "spring-ioc",
+                title: "1. Architecture & IoC",
+                content: "# 🏗️ Spring Core : L'Inversion de Contrôle\n\n## Le principe Hollywood\n\"Ne nous appelez pas, on vous appellera.\"\n\nDans Spring, vous ne faites pas de `new Service()`. C'est le framework (le Conteneur) qui crée les objets pour vous.\n\n### Injection de Dépendance (DI)\nUtilisez `@Autowired` (ou mieux, le constructeur) pour demander des dépendances.\n\n```java
+@Service
+            public class UserService {
+                private final UserRepository repo;
+
+                public UserService(UserRepository repo) {
+                    this.repo = repo;
                 }
             }
-        ]
-    },
-    {
-        id: "angular",
-        title: "Angular Architecture",
-        description: "Le framework Google pour des applications web scalables.",
-        image: "/images/angular.png",
-        icon: Smartphone, // Closest simple icon for App/Frontend
-        modules: [
+                ```\n\n### Principales Annotations\n- `@Component`, `@Service`, `@Repository` : Pour définir des beans.\n- `@Configuration` + `@Bean` : Pour configurer manuellement.\n\n### Exercice\nCréez une classe annotée avec `@Service`.",
+                validation: {
+                    type: "includes",
+                    value: "@Service",
+                    message: "Annotez votre classe avec @Service."
+                }
+            },
             {
-                id: "angular-intro",
-                title: "Chapitre 1 : Composants",
-                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
+                id: "spring-web",
+                title: "2. REST API Professionnelle",
+                content: "# 🌐 Construire une API REST\n\n## Contrôleurs Modernes\nOn utilise `@RestController` pour renvoyer du JSON automatiquement.\n\n### Verbes HTTP & Bonnes Pratiques\n- **GET** ` / users` : Lire\n- **POST** ` / users` : Créer (Retourner 201 Created)\n- **PUT** ` / users / { id }` : Remplacer tout\n- **PATCH** ` / users / { id }` : Modifier partiellement\n- **DELETE** ` / users / { id }` : Supprimer\n\n### ResponseEntity\nNe renvoyez pas juste l'objet. Renvoyez un statut HTTP !\n\n```java
+@PostMapping(\"/users\")
+public ResponseEntity < User > create(@RequestBody User u) {
+                    return ResponseEntity.status(201).body(service.save(u));
+                }
+                    ```\n\n### Exercice\nCréez une méthode annotée avec `@PostMapping`.",
                 validation: {
                     type: "includes",
-                    value: "@Component",
-                    message: "Utilisez le décorateur @Component."
+                    value: "@PostMapping",
+                    message: "Utilisez l'annotation @PostMapping."
                 }
-            }
-        ]
+            },
+            {
+                id: "spring-data",
+                title: "3. Persistance JPA",
+                content: "# 💾 Spring Data JPA\n\n## L'ORM Facile\nPlus besoin d'écrire de SQL pour les opérations de base.\n\n### 1. L'Entité\nC'est votre table en base de données.\n```java
+@Entity
+                    public class User {
+                        @Id @GeneratedValue
+                        private Long id;
+                        private String email;
+                    }
+                        ```\n\n### 2. Le Repository\nC'est la magie de Spring Data.\n```java
+public interface UserRepository extends JpaRepository < User, Long> {
+        // Spring génère le SQL pour vous !
+        List<User> findByEmail(String email);
     }
+        ```\n\n### Exercice\nCréez une interface qui étend `JpaRepository`.",
+                validation: {
+                    type: "regex",
+                    value: "extends\\s+JpaRepository",
+                    message: "Votre interface doit étendre JpaRepository."
+                }
+            },
+            {
+                id: "spring-validation",
+                title: "4. Validation & Erreurs",
+                content: "# 🛡️ Qualité & Robustesse\n\n## Validation des Entrées\nNe faites pas confiance au client ! Utilisez Bean Validation.\n\n```java
+public record UserDto(\n    @NotBlank String name, \n    @Email String email\n) {}\n```\n\nEnsuite, dans le contrôleur : `create(@Valid @RequestBody UserDto dto)`.\n\n## Gestion Globale des Erreurs\nUtilisez `@ControllerAdvice` pour capturer les exceptions partout.\n\n### Exercice\nUtilisez l'annotation `@Valid` dans une signature de méthode.",
+                validation: {
+                    type: "includes",
+                    value: "@Valid",
+                    message: "Utilisez l'annotation @Valid."
+                }
+            },
+            {
+                id: "spring-test",
+                title: "5. Tests Automatisés",
+                content: "# 🧪 Tester son API\n\n## @SpringBootTest et MockMvc\nPour tester vos contrôleurs sans lancer tout le serveur.\n\n```java
+@SpringBootTest
+    @AutoConfigureMockMvc
+        class ApiTest {
+        @Autowired MockMvc mvc;
+
+        @Test
+    void shouldReturnUsers() {
+            mvc.perform(get(\"/api/users\"))
+                .andExpect(status().isOk());
+        }
+    }
+        ```\n\n### Exercice\nUtilisez `@SpringBootTest` sur votre classe de test.",
+                validation: {
+                    type: "includes",
+                    value: "@SpringBootTest",
+                    message: "Annotez la classe de test avec @SpringBootTest."
+                }
+            },
+            {
+                id: "spring-security",
+                title: "6. Spring Security Basics",
+                content: "# 🔐 Sécuriser son API\n\n## Le Gardien du Temple\nSpring Security intercepte chaque requête pour vérifier : \n1. **Qui êtes-vous ?** (Authentification)\n2. **Avez-vous le droit ?** (Autorisation)\n\n### SecurityFilterChain\nDepuis Spring Boot 3, on configure tout via des Beans.\n\n```java\n@Bean\npublic SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    \n    return http\n        .authorizeHttpRequests(auth -> auth\n.requestMatchers(\"/public/**\").permitAll()\n            .anyRequest().authenticated()\n        )\n        .httpBasic(Customizer.withDefaults())\n        .build();\n}\n```\n\n### Exercice\nUtilisez `authorizeHttpRequests` dans une configuration.",
+        validation: {
+        type: "includes",
+        value: "authorizeHttpRequests",
+        message: "Utilisez la méthode authorizeHttpRequests."
+    }
+            }
+]
+    },
+{
+    id: "angular",
+        title: "Angular Architecture",
+            description: "Le framework Google pour des applications web scalables.",
+                image: "/images/angular.png",
+                    icon: Smartphone, // Closest simple icon for App/Frontend
+                        modules: [
+                            {
+                                id: "angular-intro",
+                                title: "Chapitre 1 : Composants",
+                                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
+                                validation: {
+                                    type: "includes",
+                                    value: "@Component",
+                                    message: "Utilisez le décorateur @Component."
+                                }
+                            }
+                        ]
+}
 ]
 
 // Compatibility export for existing code using 'modules'
