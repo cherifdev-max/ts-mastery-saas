@@ -4,7 +4,9 @@ import * as React from "react"
 import { WorkspaceLayout } from "@/components/workspace-layout"
 import { CourseViewer } from "@/components/course-viewer"
 import { CodeEditor } from "@/components/code-editor"
+import { ConsoleOutput } from "@/components/console-output"
 import { useProgress } from "@/hooks/use-progress"
+import { getCourseByModuleId } from "@/lib/content"
 import { useRouter } from "next/navigation"
 import confetti from "canvas-confetti"
 
@@ -19,10 +21,18 @@ interface LearnCanvasProps {
 export function LearnCanvas({ content, initialCode, chapterId, validation, nextChapterId }: LearnCanvasProps) {
     const { markAsCompleted, isCompleted, saveCode, getSavedCode } = useProgress()
     const router = useRouter()
-    const [isSuccess, setIsSuccess] = React.useState(isCompleted(chapterId))
 
-    // Determine the code to show: saved code > initialCode
+    // Course Context
+    const course = getCourseByModuleId(chapterId)
+    const language = (course?.id === "java" || course?.id === "springboot") ? "java" : "typescript"
+
+    const [isSuccess, setIsSuccess] = React.useState(isCompleted(chapterId))
     const [currentCode, setCurrentCode] = React.useState(initialCode)
+
+    // Console State
+    const [isConsoleOpen, setIsConsoleOpen] = React.useState(false)
+    const [consoleLogs, setConsoleLogs] = React.useState<string[]>([])
+    const [consoleStatus, setConsoleStatus] = React.useState<"idle" | "running" | "success" | "error">("idle")
 
     // Effect to load saved code on mount or chapter change
     React.useEffect(() => {
@@ -31,11 +41,14 @@ export function LearnCanvas({ content, initialCode, chapterId, validation, nextC
             setCurrentCode(saved)
         } else {
             setCurrentCode(initialCode)
+            // Reset console on chapter change
+            setConsoleLogs([])
+            setConsoleStatus("idle")
+            setIsConsoleOpen(false)
         }
         setIsSuccess(isCompleted(chapterId))
     }, [chapterId, getSavedCode, initialCode, isCompleted])
 
-    // Save code when it changes (debouncing could be added here but keeping simple first)
     const handleCodeChange = (newCode: string | undefined) => {
         if (newCode !== undefined) {
             saveCode(chapterId, newCode)
@@ -50,7 +63,58 @@ export function LearnCanvas({ content, initialCode, chapterId, validation, nextC
             spread: 70,
             origin: { y: 0.6 }
         })
-        alert("Bravo ! Exercice validé. 🚀")
+    }
+
+    const handleValidation = (markers: any[], code: string) => {
+        setIsConsoleOpen(true)
+        setConsoleStatus("running")
+        setConsoleLogs(["> cd /src/app", `> ${language === "java" ? "javac Main.java" : "tsc main.ts"}`, "Compiling..."])
+
+        // Simulate compilation delay
+        setTimeout(() => {
+            // 1. Check syntax errors from Monaco
+            if (markers.length > 0) {
+                setConsoleStatus("error")
+                setConsoleLogs(prev => [
+                    ...prev,
+                    "Compilation failed.",
+                    ...markers.map((m: any) => `Line ${m.startLineNumber}: ${m.message}`)
+                ])
+                return
+            }
+
+            // 2. Check semantic rules
+            let isValid = false
+            if (!validation) {
+                isValid = true;
+            } else if (validation.type === 'regex') {
+                const regex = new RegExp(validation.value)
+                isValid = regex.test(code)
+            } else if (validation.type === 'includes') {
+                isValid = code.includes(validation.value)
+            }
+
+            if (isValid) {
+                setConsoleStatus("success")
+                setConsoleLogs(prev => [
+                    ...prev,
+                    "Build Success! (1.2s)",
+                    "Running...",
+                    "--------------------------------",
+                    "Hello World",
+                    "Process finished with exit code 0"
+                ])
+                triggerSuccess()
+            } else {
+                setConsoleStatus("error")
+                // Fake intelligent error message
+                const errorMsg = language === "java"
+                    ? `Error: Logic verification failed. Expected: '${validation.message}'`
+                    : `Error: Validation failed. ${validation.message}`
+
+                setConsoleLogs(prev => [...prev, "Build Failed.", errorMsg])
+            }
+        }, 1500)
     }
 
     return (
@@ -81,36 +145,23 @@ export function LearnCanvas({ content, initialCode, chapterId, validation, nextC
                     </div>
                 }
                 rightPanel={
-                    <CodeEditor
-                        key={chapterId} // Force re-mount on chapter change to apply new initialValue
-                        initialValue={currentCode}
-                        onChange={handleCodeChange}
-                        onValidate={(markers, code) => {
-                            // 1. Check syntax errors
-                            if (markers.length > 0) {
-                                alert(`Erreur de syntaxe : ${markers.length} erreur(s) détectée(s).`)
-                                return
-                            }
-
-                            // 2. Check semantic rules
-                            let isValid = false
-                            if (!validation) {
-                                // Default pass if no validation rules
-                                isValid = true;
-                            } else if (validation.type === 'regex') {
-                                const regex = new RegExp(validation.value)
-                                isValid = regex.test(code)
-                            } else if (validation.type === 'includes') {
-                                isValid = code.includes(validation.value)
-                            }
-
-                            if (isValid) {
-                                triggerSuccess()
-                            } else {
-                                alert(`Validation échouée : ${validation.message}`)
-                            }
-                        }}
-                    />
+                    <div className="h-full flex flex-col">
+                        <div className="flex-1 overflow-hidden">
+                            <CodeEditor
+                                key={chapterId}
+                                initialValue={currentCode}
+                                language={language}
+                                onChange={handleCodeChange}
+                                onValidate={handleValidation}
+                            />
+                        </div>
+                        <ConsoleOutput
+                            isOpen={isConsoleOpen}
+                            logs={consoleLogs}
+                            status={consoleStatus}
+                            onClose={() => setIsConsoleOpen(false)}
+                        />
+                    </div>
                 }
             />
         </div>
