@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { WorkspaceLayout } from "@/components/workspace-layout"
 import { CourseViewer } from "@/components/course-viewer"
 import dynamic from "next/dynamic"
