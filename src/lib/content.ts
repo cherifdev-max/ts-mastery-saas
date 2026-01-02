@@ -202,139 +202,137 @@ export const courses: Course[] = [
                     value: "static void main",
                     message: "Déclarez la méthode `static void main`."
                 }
+            },
+            {
+                id: "java-se-basics",
+                title: "6. Java SE : Bases & Syntaxe",
+                content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 1)\n\n> 🎥 **[Vidéo Complète du Cours](https://drive.google.com/file/d/1ePwv-HzrtpJJsCknmF85hy4szhBJvyd4/view?usp=sharing)**\n\n## 1. Première App & Syntaxe\n- **Main**: Point d'entrée `public static void main`.\n- **Paquets**: Organisation du code.\n\n## 2. Variables & Types\nTypes primitifs clés : `int`, `double`, `boolean`, `char`. Attention aux plages de valeurs !\n\n## 3. Logique & Boucles\n- `if`, `else`, `switch`.\n- `while`, `do-while`, `for`, `for-each`.\n\n## 4. Méthodes & String\n- Une méthode contient du code réutilisable.\n- `String` est immuable. Utilisez `StringBuilder` pour concaténer beaucoup de texte.\n\n### Exercice\nDéclarez une variable `int count = 10;` et une `String name = \"Java\";`.",
+                validation: {
+                    type: "regex",
+                    value: "int\\s+count\\s*=\\s*10.*String\\s+name\\s*=\\s*\"Java\"",
+                    message: "Déclarez `int count = 10;` et `String name = \"Java\";`."
+                }
+            },
+            {
+                id: "java-se-advanced",
+                title: "7. Java SE : Classes Avancées",
+                content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 2)\n\n## 7. Classes & Objets\nUne classe est un plan (blueprint). `Encapsulation` : Cachez vos données avec `private`.\nModificateurs : `public`, `protected`, `private`.\n\n## 8. Constructeurs\nCode exécuté au `new`. Utilisez `this()` pour appeler un autre constructeur.\n\n## 9. Membres Statiques\n`static` appartient à la classe, pas à l'instance.\n\n## 10. Annotations\n`@Override`, `@Deprecated`. Métadonnées pour le compilateur.\n\n### Exercice\nCréez un constructeur qui utilise `this.name = val;`.",
+                validation: {
+                    type: "regex",
+                    value: "this\\.[a-zA-Z0-9_]+\\s*=",
+                    message: "Utilisez `this.champ = valeur` dans le constructeur."
+                }
+            },
+            {
+                id: "java-se-streams",
+                title: "8. Java SE : Streams Modernes",
+                content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 3)\n\n## 12. Streams & Lambdas\nUne façon moderne de traiter les collections (depuis Java 8).\n\n### L'analogie de l'Usine\n- **Stream** : Le tapis roulant.\n- **Filter** : Contrôle qualité (garde ou jette).\n- **Map** : Transformation.\n- **Collect** : Emballage final.\n\n### Code Moderne\nPlus de boucles `for` complexes. Décrivez le **QUOI** (Declarative) plutôt que le **COMMENT** (Imperative).\n\n```java\nlist.stream()\n    .filter(n -> n % 2 == 0)\n    .collect(Collectors.toList());\n```\n\n### Exercice\nUtilisez `.stream().filter(...)` sur une liste.",
+                validation: {
+                    type: "regex",
+                    value: "\\.stream\\(\\)\\s*\\.filter\\(",
+                    message: "Utilisez `.stream().filter(...)`."
+                }
+            },
+            {
+                id: "java-21-threads",
+                title: "9. Java 21 : Threads Virtuels",
+                content: "# 🚀 Java 21 : Les Threads Virtuels\n\n## L'Analogie des Livreurs 📦\nImaginez une entreprise de livraison.\n- **Camions** (Platform Threads) : Limités, coûteux.\n- **Livreurs** (Virtual Threads) : Illimités, légers.\n\nAvec les threads virtuels, quand un livreur attend une réponse (bloquant), il descend du camion. Le camion sert à quelqu'un d'autre. Résultat : On peut gérer des millions de tâches simultanées !\n\n### Code Non-Bloquant\n```java\nThread.ofVirtual().start(() -> {\n    System.out.println(\"Je suis ultra-léger !\");\n});\n```\n\n### Exercice\nLancez un thread avec `Thread.ofVirtual().start(...)`.",
+                validation: {
+                    type: "regex",
+                    value: "Thread\\.ofVirtual\\(\\)\\.start",
+                    message: "Utilisez `Thread.ofVirtual().start(...)`."
+                }
+            },
+            {
+                id: "java-21-patterns",
+                title: "10. Java 21 : Pattern Matching",
+                content: "# 🧐 Pattern Matching & Records\n\n## Le Triage Intelligent\nFinis les casts complexes !\n\n### Avant (Java < 16)\n```java\nif (obj instanceof String) {\n    String s = (String) obj;\n    return s.length();\n}\n```\n\n### Après (Pattern Matching)\n```java\nif (obj instanceof String s) {\n    return s.length();\n}\n```\n\n### Record Patterns\nSi vous avez un record `Person(String name, int age)` :\n```java\nif (obj instanceof Person(String name, int age)) {\n    return name.toUpperCase();\n}\n```\n\n### Exercice\nUtilisez le pattern matching : `if (obj instanceof String s)`.",
+                validation: {
+                    type: "regex",
+                    value: "instanceof\\s+[a-zA-Z0-9_]+\\s+[a-zA-Z0-9_]+",
+                    message: "Utilisez la syntaxe `instanceof Type variable`."
+                }
+            },
+            {
+                id: "java-21-collections",
+                title: "11. Java 21 : Collections Unified",
+                content: "# 📚 Collections Séquencées\n\n## Un Annuaire Unifié\nAvant Java 21, récupérer le premier élément dépendait du type de liste (`get(0)`, `first()`, `getFirst()`, etc.).\n\nMaintenant, l'interface `SequencedCollection` unifie tout !\n\n### Méthodes Universelles\n- `getFirst()` / `getLast()`\n- `addFirst()` / `addLast()`\n- `removeFirst()` / `removeLast()`\n\n```java\nSequencedCollection<String> list = new ArrayList<>();\nlist.addFirst(\"Premier !\");\n```\n\n### Exercice\nAppelez la méthode `.getFirst()` sur une collection.",
+                validation: {
+                    type: "regex",
+                    value: "\\.getFirst\\(\\)",
+                    message: "Utilisez la méthode `.getFirst()`."
+                }
+            },
+            {
+                id: "java-advanced",
+                title: "12. Java Avancé",
+                content: "# 📜 Fonctionnalités Avancées\n\n> 🎬 **[Vidéo Récapitulative](https://drive.google.com/file/d/1o-bEyyDgIbMLw0fcCBmwE4jYJmF64Z1B/view?usp=sharing)**\n\n## 1. Génériques Avancés\nCréez des boîtes typées : `Box<T>`. Évitez les erreurs de cast !\n\n## 2. Records 📦\nRaccourcis pour objets immuables : `public record Person(String name) {}`.\nDites adieu aux getters/setters/equals/hashCode infinis.\n\n## 3. Interfaces Scellées (Sealed)\nContrôlez qui peut hériter de vos classes : `sealed interface Shape permits Circle, Square`.\n\n## 4. Optional\nUne boîte qui peut être vide. Forcez la gestion du cas \"absent\" sans `NullPointerException`.\n\n### Exercice\nDéclarez un record : `record Point(int x, int y) {}`.",
+                validation: {
+                    type: "regex",
+                    value: "record\\s+[a-zA-Z0-9_]+\\(.*\\)",
+                    message: "Déclarez un record, par exemple `record Point(int x, int y) {}`."
+                }
+            },
+            {
+                id: "java-functional",
+                title: "13. Penser Fonctionnel",
+                content: "# 🧘 Penser Fonctionnel en Java\n\n> 🎬 **[Vidéo : Penser Fonctionnel](https://drive.google.com/file/d/19pd_2wBztm-SAB1mmrfca3HxvaSSNfib/view?usp=sharing)**\n\n## Le Paradigme Fonctionnel\nFocalisez-vous sur le **QUOI** (transformations) plutôt que le **COMMENT** (boucles).\n\n## Fonctions Pures\nComme une calculatrice parfaite : `2+2` fait toujours `4`. Pas d'effets de bord (pas de println, pas de modif de variable globale).\n\n## Monades\nDes boîtes magiques (`Optional`, `Stream`, `CompletableFuture`) pour chainer des opérations (`flatMap`) en toute sécurité.\n\n### Exercice\nCréez un Optional : `Optional.of(\"Java\")`.",
+                validation: {
+                    type: "includes",
+                    value: "Optional.of",
+                    message: "Utilisez `Optional.of(...)`."
+                }
+            },
+            {
+                id: "java-async",
+                title: "14. Async & CompletableFuture",
+                content: "# 🚀 Programmation Asynchrone\n\n## C'est quoi, Asynchrone ?\n- **Synchrone** : Attendre le gâteau devant le four. 🐢\n- **Asynchrone** : Faire la vaisselle en attendant que ça cuise. ⚡️\n\n## L'outil : `CompletableFuture`\nC'est une promesse de résultat futur.\n\n### supplyAsync\n```java\nCompletableFuture.supplyAsync(() -> {\n    // Simulation tâche longue\n    return \"Gateau prêt\";\n});\n```\n\n### Chaîner avec `thenApply`\n```java\nfuture.thenApply(g -> g + \" décoré\");\n```\n\n### Combiner avec `allOf`\nAttendre que le riz, le poulet et les légumes soient cuits.\n\n### Exercice\nUtilisez `CompletableFuture.supplyAsync`.",
+                validation: {
+                    type: "regex",
+                    value: "CompletableFuture\\.supplyAsync",
+                    message: "Utilisez `CompletableFuture.supplyAsync`."
+                }
             }
-            },
-    {
-        id: "java-se-basics",
-        title: "6. Java SE : Bases & Syntaxe",
-        content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 1)\n\n> 🎥 **[Vidéo Complète du Cours](https://drive.google.com/file/d/1ePwv-HzrtpJJsCknmF85hy4szhBJvyd4/view?usp=sharing)**\n\n## 1. Première App & Syntaxe\n- **Main**: Point d'entrée `public static void main`.\n- **Paquets**: Organisation du code.\n\n## 2. Variables & Types\nTypes primitifs clés : `int`, `double`, `boolean`, `char`. Attention aux plages de valeurs !\n\n## 3. Logique & Boucles\n- `if`, `else`, `switch`.\n- `while`, `do-while`, `for`, `for-each`.\n\n## 4. Méthodes & String\n- Une méthode contient du code réutilisable.\n- `String` est immuable. Utilisez `StringBuilder` pour concaténer beaucoup de texte.\n\n### Exercice\nDéclarez une variable `int count = 10;` et une `String name = \"Java\";`.",
-        validation: {
-            type: "regex",
-            value: "int\\s+count\\s*=\\s*10.*String\\s+name\\s*=\\s*\"Java\"",
-            message: "Déclarez `int count = 10;` et `String name = \"Java\";`."
-        }
-    },
-    {
-        id: "java-se-advanced",
-        title: "7. Java SE : Classes Avancées",
-        content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 2)\n\n## 7. Classes & Objets\nUne classe est un plan (blueprint). `Encapsulation` : Cachez vos données avec `private`.\nModificateurs : `public`, `protected`, `private`.\n\n## 8. Constructeurs\nCode exécuté au `new`. Utilisez `this()` pour appeler un autre constructeur.\n\n## 9. Membres Statiques\n`static` appartient à la classe, pas à l'instance.\n\n## 10. Annotations\n`@Override`, `@Deprecated`. Métadonnées pour le compilateur.\n\n### Exercice\nCréez un constructeur qui utilise `this.name = val;`.",
-        validation: {
-            type: "regex",
-            value: "this\\.[a-zA-Z0-9_]+\\s*=",
-            message: "Utilisez `this.champ = valeur` dans le constructeur."
-        }
-    },
-    {
-        id: "java-se-streams",
-        title: "8. Java SE : Streams Modernes",
-        content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 3)\n\n## 12. Streams & Lambdas\nUne façon moderne de traiter les collections (depuis Java 8).\n\n### L'analogie de l'Usine\n- **Stream** : Le tapis roulant.\n- **Filter** : Contrôle qualité (garde ou jette).\n- **Map** : Transformation.\n- **Collect** : Emballage final.\n\n### Code Moderne\nPlus de boucles `for` complexes. Décrivez le **QUOI** (Declarative) plutôt que le **COMMENT** (Imperative).\n\n```java\nlist.stream()\n    .filter(n -> n % 2 == 0)\n    .collect(Collectors.toList());\n```\n\n### Exercice\nUtilisez `.stream().filter(...)` sur une liste.",
-        validation: {
-            type: "regex",
-            value: "\\.stream\\(\\)\\s*\\.filter\\(",
-            message: "Utilisez `.stream().filter(...)`."
-        }
-    }
-            },
-{
-    id: "java-21-threads",
-        title: "9. Java 21 : Threads Virtuels",
-            content: "# 🚀 Java 21 : Les Threads Virtuels\n\n## L'Analogie des Livreurs 📦\nImaginez une entreprise de livraison.\n- **Camions** (Platform Threads) : Limités, coûteux.\n- **Livreurs** (Virtual Threads) : Illimités, légers.\n\nAvec les threads virtuels, quand un livreur attend une réponse (bloquant), il descend du camion. Le camion sert à quelqu'un d'autre. Résultat : On peut gérer des millions de tâches simultanées !\n\n### Code Non-Bloquant\n```java\nThread.ofVirtual().start(() -> {\n    System.out.println(\"Je suis ultra-léger !\");\n});\n```\n\n### Exercice\nLancez un thread avec `Thread.ofVirtual().start(...)`.",
-                validation: {
-        type: "regex",
-            value: "Thread\\.ofVirtual\\(\\)\\.start",
-                message: "Utilisez `Thread.ofVirtual().start(...)`."
-    }
-},
-{
-    id: "java-21-patterns",
-        title: "10. Java 21 : Pattern Matching",
-            content: "# 🧐 Pattern Matching & Records\n\n## Le Triage Intelligent\nFinis les casts complexes !\n\n### Avant (Java < 16)\n```java\nif (obj instanceof String) {\n    String s = (String) obj;\n    return s.length();\n}\n```\n\n### Après (Pattern Matching)\n```java\nif (obj instanceof String s) {\n    return s.length();\n}\n```\n\n### Record Patterns\nSi vous avez un record `Person(String name, int age)` :\n```java\nif (obj instanceof Person(String name, int age)) {\n    return name.toUpperCase();\n}\n```\n\n### Exercice\nUtilisez le pattern matching : `if (obj instanceof String s)`.",
-                validation: {
-        type: "regex",
-            value: "instanceof\\s+[a-zA-Z0-9_]+\\s+[a-zA-Z0-9_]+",
-                message: "Utilisez la syntaxe `instanceof Type variable`."
-    }
-},
-{
-    id: "java-21-collections",
-        title: "11. Java 21 : Collections Unified",
-            content: "# 📚 Collections Séquencées\n\n## Un Annuaire Unifié\nAvant Java 21, récupérer le premier élément dépendait du type de liste (`get(0)`, `first()`, `getFirst()`, etc.).\n\nMaintenant, l'interface `SequencedCollection` unifie tout !\n\n### Méthodes Universelles\n- `getFirst()` / `getLast()`\n- `addFirst()` / `addLast()`\n- `removeFirst()` / `removeLast()`\n\n```java\nSequencedCollection<String> list = new ArrayList<>();\nlist.addFirst(\"Premier !\");\n```\n\n### Exercice\nAppelez la méthode `.getFirst()` sur une collection.",
-                validation: {
-        type: "regex",
-            value: "\\.getFirst\\(\\)",
-                message: "Utilisez la méthode `.getFirst()`."
-    }
-},
-{
-    id: "java-advanced",
-        title: "12. Java Avancé",
-            content: "# 📜 Fonctionnalités Avancées\n\n> 🎬 **[Vidéo Récapitulative](https://drive.google.com/file/d/1o-bEyyDgIbMLw0fcCBmwE4jYJmF64Z1B/view?usp=sharing)**\n\n## 1. Génériques Avancés\nCréez des boîtes typées : `Box<T>`. Évitez les erreurs de cast !\n\n## 2. Records 📦\nRaccourcis pour objets immuables : `public record Person(String name) {}`.\nDites adieu aux getters/setters/equals/hashCode infinis.\n\n## 3. Interfaces Scellées (Sealed)\nContrôlez qui peut hériter de vos classes : `sealed interface Shape permits Circle, Square`.\n\n## 4. Optional\nUne boîte qui peut être vide. Forcez la gestion du cas \"absent\" sans `NullPointerException`.\n\n### Exercice\nDéclarez un record : `record Point(int x, int y) {}`.",
-                validation: {
-        type: "regex",
-            value: "record\\s+[a-zA-Z0-9_]+\\(.*\\)",
-                message: "Déclarez un record, par exemple `record Point(int x, int y) {}`."
-    }
-},
-{
-    id: "java-functional",
-        title: "13. Penser Fonctionnel",
-            content: "# 🧘 Penser Fonctionnel en Java\n\n> 🎬 **[Vidéo : Penser Fonctionnel](https://drive.google.com/file/d/19pd_2wBztm-SAB1mmrfca3HxvaSSNfib/view?usp=sharing)**\n\n## Le Paradigme Fonctionnel\nFocalisez-vous sur le **QUOI** (transformations) plutôt que le **COMMENT** (boucles).\n\n## Fonctions Pures\nComme une calculatrice parfaite : `2+2` fait toujours `4`. Pas d'effets de bord (pas de println, pas de modif de variable globale).\n\n## Monades\nDes boîtes magiques (`Optional`, `Stream`, `CompletableFuture`) pour chainer des opérations (`flatMap`) en toute sécurité.\n\n### Exercice\nCréez un Optional : `Optional.of(\"Java\")`.",
-                validation: {
-        type: "includes",
-            value: "Optional.of",
-                message: "Utilisez `Optional.of(...)`."
-    }
-},
-{
-    id: "java-async",
-        title: "14. Async & CompletableFuture",
-            content: "# 🚀 Programmation Asynchrone\n\n## C'est quoi, Asynchrone ?\n- **Synchrone** : Attendre le gâteau devant le four. 🐢\n- **Asynchrone** : Faire la vaisselle en attendant que ça cuise. ⚡️\n\n## L'outil : `CompletableFuture`\nC'est une promesse de résultat futur.\n\n### supplyAsync\n```java\nCompletableFuture.supplyAsync(() -> {\n    // Simulation tâche longue\n    return \"Gateau prêt\";\n});\n```\n\n### Chaîner avec `thenApply`\n```java\nfuture.thenApply(g -> g + \" décoré\");\n```\n\n### Combiner avec `allOf`\nAttendre que le riz, le poulet et les légumes soient cuits.\n\n### Exercice\nUtilisez `CompletableFuture.supplyAsync`.",
-                validation: {
-        type: "regex",
-            value: "CompletableFuture\\.supplyAsync",
-                message: "Utilisez `CompletableFuture.supplyAsync`."
-    }
-}
         ]
     },
-{
-    id: "springboot",
+    {
+        id: "springboot",
         title: "Spring Boot Starter",
-            description: "Créez des API REST puissantes rapidement avec Spring Boot.",
-                image: "/images/spring.png",
-                    icon: Database,
-                        modules: [
-                            {
-                                id: "spring-intro",
-                                title: "Chapitre 1 : Votre première API",
-                                content: "# Spring Boot\n\nLe framework Java n°1 pour le web.\n\n### Exercice\nAnnotez une classe avec `@SpringBootApplication`.",
-                                validation: {
-                                    type: "includes",
-                                    value: "@SpringBootApplication",
-                                    message: "Utilisez l'annotation @SpringBootApplication."
-                                }
-                            }
-                        ]
-},
-{
-    id: "angular",
+        description: "Créez des API REST puissantes rapidement avec Spring Boot.",
+        image: "/images/spring.png",
+        icon: Database,
+        modules: [
+            {
+                id: "spring-intro",
+                title: "Chapitre 1 : Votre première API",
+                content: "# Spring Boot\n\nLe framework Java n°1 pour le web.\n\n### Exercice\nAnnotez une classe avec `@SpringBootApplication`.",
+                validation: {
+                    type: "includes",
+                    value: "@SpringBootApplication",
+                    message: "Utilisez l'annotation @SpringBootApplication."
+                }
+            }
+        ]
+    },
+    {
+        id: "angular",
         title: "Angular Architecture",
-            description: "Le framework Google pour des applications web scalables.",
-                image: "/images/angular.png",
-                    icon: Smartphone, // Closest simple icon for App/Frontend
-                        modules: [
-                            {
-                                id: "angular-intro",
-                                title: "Chapitre 1 : Composants",
-                                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
-                                validation: {
-                                    type: "includes",
-                                    value: "@Component",
-                                    message: "Utilisez le décorateur @Component."
-                                }
-                            }
-                        ]
-}
+        description: "Le framework Google pour des applications web scalables.",
+        image: "/images/angular.png",
+        icon: Smartphone, // Closest simple icon for App/Frontend
+        modules: [
+            {
+                id: "angular-intro",
+                title: "Chapitre 1 : Composants",
+                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
+                validation: {
+                    type: "includes",
+                    value: "@Component",
+                    message: "Utilisez le décorateur @Component."
+                }
+            }
+        ]
+    }
 ]
 
 // Compatibility export for existing code using 'modules'
