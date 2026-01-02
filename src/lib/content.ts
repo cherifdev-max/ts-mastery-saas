@@ -148,19 +148,59 @@ export const courses: Course[] = [
     },
     {
         id: "java",
-        title: "Java Fundamentals",
-        description: "Apprenez le langage orienté objet le plus utilisé en entreprise.",
+        title: "Java POO Express",
+        description: "Maîtrisez les fondamentaux de la POO et les meilleures pratiques de conception.",
         image: "/images/java.png",
         icon: Server,
         modules: [
             {
-                id: "java-intro",
-                title: "Chapitre 1 : Hello Java",
-                content: "# Introduction à Java\n\nJava est un langage robuste et orienté objet.\n\n### Exercice\nCréez une classe `Main` avec une méthode `main`.",
+                id: "java-poo",
+                title: "1. Les 4 Piliers",
+                content: "# 🚀 Java POO Express : Les Fondamentaux\n\n**Objectif** : Comprendre rapidement les mécanismes de Java.\n\n## Les Quatre Piliers de la POO\n\nLa Programmation Orientée Objet repose sur quatre concepts fondamentaux :\n\n| Pilier | Définition Simple |\n| :--- | :--- |\n| **1. Abstraction** | Cacher les détails inutiles pour ne montrer que l'essentiel. |\n| **2. Encapsulation** | Regrouper données et méthodes, et protéger l'accès (via `private`). |\n| **3. Héritage** | Réutiliser les propriétés d'une classe existante (Relation \"Est-un\"). |\n| **4. Polymorphisme**| Une seule interface pour gérer différents types d'objets. |\n\n### Exercice\nDéclarez une classe vide nommée `Concept` pour commencer.",
+                validation: {
+                    type: "regex",
+                    value: "class\\s+Concept",
+                    message: "Déclarez une classe nommée `Concept`."
+                }
+            },
+            {
+                id: "java-objects",
+                title: "2. Objets & Références",
+                content: "# Travailler avec les Objets\n\n## Primitives vs Objets\n- **Primitive** (`int`, `boolean`): Stocke la valeur.\n- **Objet** (`String`, `Alarm`): Stocke une référence (adresse mémoire).\n\n## Attention au `null`\nUne variable d'objet peut être `null` (ne pointe vers rien). Appeler une méthode dessus provoque une `NullPointerException` (Le cauchemar des dévs Java !).\n\n### Exercice\nInstanciez un objet avec le mot-clé `new` (ex: `new Object()`).",
                 validation: {
                     type: "includes",
-                    value: "class Main",
-                    message: "Définissez une classe 'Main'."
+                    value: "new ",
+                    message: "Utilisez le mot-clé `new` pour créer une instance."
+                }
+            },
+            {
+                id: "java-classes",
+                title: "3. Class & Encapsulation",
+                content: "# Définition et Contrôle des Classes\n\n## Structure\nUne classe regroupe des **Champs** (état) et des **Méthodes** (comportement).\n\n## Encapsulation (Règle d'or)\nRendez vos champs `private` ! Le monde extérieur ne doit passer que par vos méthodes `public`.\n\n### Exercice\nCréez une classe avec un champ `private String secret;`.",
+                validation: {
+                    type: "regex",
+                    value: "private\\s+String\\s+secret",
+                    message: "Déclarez un champ `private String secret`."
+                }
+            },
+            {
+                id: "java-relationships",
+                title: "4. Héritage & Polymorphisme",
+                content: "# Relation entre Classes\n\n## Héritage\nUtilisez `extends` pour créer une sous-classe. Elle hérite de tout ce qui n'est pas privé.\n\n## Polymorphisme\nC'est la capacité du code à s'adapter à la sous-classe réelle, même si on manipule le type parent.\n\nTo `Downcast` (forcer le type enfant) est souvent signe d'un mauvais design.\n\n### Exercice\nCréez une classe `Dog` qui étend `Animal` (`class Dog extends Animal`).",
+                validation: {
+                    type: "regex",
+                    value: "class\\s+Dog\\s+extends\\s+Animal",
+                    message: "Créez une classe `Dog` qui hérite de `Animal`."
+                }
+            },
+            {
+                id: "java-best-practices",
+                title: "5. Best Practices & Static",
+                content: "# Derniers Conseils\n\n### Utilisation de `static`\n- **Règle** : Utilisez `static` avec parcimonie.\n- **Danger** : Les champs `public static` sont des variables globales déguisées. C'est pratique, mais ça rend le code difficile à tester et moins \"Objet\".\n\n### Exercice\nDéclarez une méthode statique `static void main(String[] args)` (le point d'entrée classique).",
+                validation: {
+                    type: "includes",
+                    value: "static void main",
+                    message: "Déclarez la méthode `static void main`."
                 }
             }
         ]
