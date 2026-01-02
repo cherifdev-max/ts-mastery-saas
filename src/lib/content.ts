@@ -305,7 +305,35 @@ export const courses: Course[] = [
             {
                 id: "spring-ioc",
                 title: "1. Architecture & IoC",
-                content: "# 🏗️ Spring Core : L'Inversion de Contrôle\\n\\n## Le principe Hollywood\\n\"Ne nous appelez pas, on vous appellera.\"\\n\\nDans Spring, vous ne faites pas de `new Service()`. C'est le framework (le Conteneur) qui crée les objets pour vous.\\n\\n### Injection de Dépendance (DI)\\nUtilisez `@Autowired` (ou mieux, le constructeur) pour demander des dépendances.\\n\\n```java\\n@Service\\npublic class UserService {\\n    private final UserRepository repo;\\n\\n    public UserService(UserRepository repo) {\\n        this.repo = repo;\\n    }\\n}\\n```\\n\\n### Principales Annotations\\n- `@Component`, `@Service`, `@Repository` : Pour définir des beans.\\n- `@Configuration` + `@Bean` : Pour configurer manuellement.\\n\\n### Exercice\\nCréez une classe annotée avec `@Service`.",
+                content: `
+# 🏗️ Spring Core : L'Inversion de Contrôle
+
+## Le principe Hollywood
+"Ne nous appelez pas, on vous appellera."
+
+Dans Spring, vous ne faites pas de \`new Service()\`. C'est le framework (le Conteneur) qui crée les objets pour vous.
+
+### Injection de Dépendance (DI)
+Utilisez \`@Autowired\` (ou mieux, le constructeur) pour demander des dépendances.
+
+\`\`\`java
+@Service
+public class UserService {
+    private final UserRepository repo;
+
+    public UserService(UserRepository repo) {
+        this.repo = repo;
+    }
+}
+\`\`\`
+
+### Principales Annotations
+- \`@Component\`, \`@Service\`, \`@Repository\` : Pour définir des beans.
+- \`@Configuration\` + \`@Bean\` : Pour configurer manuellement.
+
+### Exercice
+Créez une classe annotée avec \`@Service\`.
+`,
                 validation: {
                     type: "includes",
                     value: "@Service",
@@ -315,7 +343,32 @@ export const courses: Course[] = [
             {
                 id: "spring-web",
                 title: "2. REST API Professionnelle",
-                content: "# 🌐 Construire une API REST\\n\\n## Contrôleurs Modernes\\nOn utilise `@RestController` pour renvoyer du JSON automatiquement.\\n\\n### Verbes HTTP & Bonnes Pratiques\\n- **GET** `/users` : Lire\\n- **POST** `/users` : Créer (Retourner 201 Created)\\n- **PUT** `/users/{id}` : Remplacer tout\\n- **PATCH** `/users/{id}` : Modifier partiellement\\n- **DELETE** `/users/{id}` : Supprimer\\n\\n### ResponseEntity\\nNe renvoyez pas juste l'objet. Renvoyez un statut HTTP !\\n\\n```java\\n@PostMapping(\"/users\")\\npublic ResponseEntity<User> create(@RequestBody User u) {\\n    return ResponseEntity.status(201).body(service.save(u));\\n}\\n```\\n\\n### Exercice\\nCréez une méthode annotée avec `@PostMapping`.",
+                content: `
+# 🌐 Construire une API REST
+
+## Contrôleurs Modernes
+On utilise \`@RestController\` pour renvoyer du JSON automatiquement.
+
+### Verbes HTTP & Bonnes Pratiques
+- **GET** \`/users\` : Lire
+- **POST** \`/users\` : Créer (Retourner 201 Created)
+- **PUT** \`/users/{id}\` : Remplacer tout
+- **PATCH** \`/users/{id}\` : Modifier partiellement
+- **DELETE** \`/users/{id}\` : Supprimer
+
+### ResponseEntity
+Ne renvoyez pas juste l'objet. Renvoyez un statut HTTP !
+
+\`\`\`java
+@PostMapping("/users")
+public ResponseEntity<User> create(@RequestBody User u) {
+    return ResponseEntity.status(201).body(service.save(u));
+}
+\`\`\`
+
+### Exercice
+Créez une méthode annotée avec \`@PostMapping\`.
+`,
                 validation: {
                     type: "includes",
                     value: "@PostMapping",
@@ -325,7 +378,35 @@ export const courses: Course[] = [
             {
                 id: "spring-data",
                 title: "3. Persistance JPA",
-                content: "# 💾 Spring Data JPA\\n\\n## L'ORM Facile\\nPlus besoin d'écrire de SQL pour les opérations de base.\\n\\n### 1. L'Entité\\nC'est votre table en base de données.\\n```java\\n@Entity\\npublic class User {\\n    @Id @GeneratedValue\\n    private Long id;\\n    private String email;\\n}\\n```\\n\\n### 2. Le Repository\\nC'est la magie de Spring Data.\\n```java\\npublic interface UserRepository extends JpaRepository<User, Long> {\\n    // Spring génère le SQL pour vous !\\n    List<User> findByEmail(String email);\\n}\\n```\\n\\n### Exercice\\nCréez une interface qui étend `JpaRepository`.",
+                content: `
+# 💾 Spring Data JPA
+
+## L'ORM Facile
+Plus besoin d'écrire de SQL pour les opérations de base.
+
+### 1. L'Entité
+C'est votre table en base de données.
+\`\`\`java
+@Entity
+public class User {
+    @Id @GeneratedValue
+    private Long id;
+    private String email;
+}
+\`\`\`
+
+### 2. Le Repository
+C'est la magie de Spring Data.
+\`\`\`java
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Spring génère le SQL pour vous !
+    List<User> findByEmail(String email);
+}
+\`\`\`
+
+### Exercice
+Créez une interface qui étend \`JpaRepository\`.
+`,
                 validation: {
                     type: "regex",
                     value: "extends\\s+JpaRepository",
@@ -335,7 +416,27 @@ export const courses: Course[] = [
             {
                 id: "spring-validation",
                 title: "4. Validation & Erreurs",
-                content: "# 🛡️ Qualité & Robustesse\\n\\n## Validation des Entrées\\nNe faites pas confiance au client ! Utilisez Bean Validation.\\n\\n```java\\npublic record UserDto(\\n    @NotBlank String name,\\n    @Email String email\\n) {}\\n```\\n\\nEnsuite, dans le contrôleur : `create(@Valid @RequestBody UserDto dto)`.\\n\\n## Gestion Globale des Erreurs\\nUtilisez `@ControllerAdvice` pour capturer les exceptions partout.\\n\\n### Exercice\\nUtilisez l'annotation `@Valid` dans une signature de méthode.",
+                content: `
+# 🛡️ Qualité & Robustesse
+
+## Validation des Entrées
+Ne faites pas confiance au client ! Utilisez Bean Validation.
+
+\`\`\`java
+public record UserDto(
+    @NotBlank String name,
+    @Email String email
+) {}
+\`\`\`
+
+Ensuite, dans le contrôleur : \`create(@Valid @RequestBody UserDto dto)\`.
+
+## Gestion Globale des Erreurs
+Utilisez \`@ControllerAdvice\` pour capturer les exceptions partout.
+
+### Exercice
+Utilisez l'annotation \`@Valid\` dans une signature de méthode.
+`,
                 validation: {
                     type: "includes",
                     value: "@Valid",
@@ -345,7 +446,29 @@ export const courses: Course[] = [
             {
                 id: "spring-test",
                 title: "5. Tests Automatisés",
-                content: "# 🧪 Tester son API\\n\\n## @SpringBootTest et MockMvc\\nPour tester vos contrôleurs sans lancer tout le serveur.\\n\\n```java\\n@SpringBootTest\\n@AutoConfigureMockMvc\\nclass ApiTest {\\n    @Autowired MockMvc mvc;\\n\\n    @Test\\n    void shouldReturnUsers() {\\n        mvc.perform(get(\"/api/users\"))\\n           .andExpect(status().isOk());\\n    }\\n}\\n```\\n\\n### Exercice\\nUtilisez `@SpringBootTest` sur votre classe de test.",
+                content: `
+# 🧪 Tester son API
+
+## @SpringBootTest et MockMvc
+Pour tester vos contrôleurs sans lancer tout le serveur.
+
+\`\`\`java
+@SpringBootTest
+@AutoConfigureMockMvc
+class ApiTest {
+    @Autowired MockMvc mvc;
+
+    @Test
+    void shouldReturnUsers() {
+        mvc.perform(get("/api/users"))
+           .andExpect(status().isOk());
+    }
+}
+\`\`\`
+
+### Exercice
+Utilisez \`@SpringBootTest\` sur votre classe de test.
+`,
                 validation: {
                     type: "includes",
                     value: "@SpringBootTest",
@@ -355,7 +478,33 @@ export const courses: Course[] = [
             {
                 id: "spring-security",
                 title: "6. Spring Security Basics",
-                content: "# 🔐 Sécuriser son API\\n\\n## Le Gardien du Temple\\nSpring Security intercepte chaque requête pour vérifier : \\n1. **Qui êtes-vous ?** (Authentification)\\n2. **Avez-vous le droit ?** (Autorisation)\\n\\n### SecurityFilterChain\\nDepuis Spring Boot 3, on configure tout via des Beans.\\n\\n```java\\n@Bean\\npublic SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\\n    return http\\n        .authorizeHttpRequests(auth -> auth\\n            .requestMatchers(\"/public/**\").permitAll()\\n            .anyRequest().authenticated()\\n        )\\n        .httpBasic(Customizer.withDefaults())\\n        .build();\\n}\\n```\\n\\n### Exercice\\nUtilisez `authorizeHttpRequests` dans une configuration.",
+                content: `
+# 🔐 Sécuriser son API
+
+## Le Gardien du Temple
+Spring Security intercepte chaque requête pour vérifier :
+1. **Qui êtes-vous ?** (Authentification)
+2. **Avez-vous le droit ?** (Autorisation)
+
+### SecurityFilterChain
+Depuis Spring Boot 3, on configure tout via des Beans.
+
+\`\`\`java
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    return http
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/public/**").permitAll()
+            .anyRequest().authenticated()
+        )
+        .httpBasic(Customizer.withDefaults())
+        .build();
+}
+\`\`\`
+
+### Exercice
+Utilisez \`authorizeHttpRequests\` dans une configuration.
+`,
                 validation: {
                     type: "includes",
                     value: "authorizeHttpRequests",
