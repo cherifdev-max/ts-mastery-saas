@@ -7,13 +7,28 @@ export function useProgress() {
     const [savedCode, setSavedCode] = useState<Record<string, string>>({})
 
     useEffect(() => {
-        const savedProgress = localStorage.getItem("ts-mastery-progress")
-        if (savedProgress) {
-            setCompletedChapters(JSON.parse(savedProgress))
+        try {
+            const savedProgress = localStorage.getItem("ts-mastery-progress")
+            if (savedProgress) {
+                const parsed = JSON.parse(savedProgress)
+                if (Array.isArray(parsed)) {
+                    setCompletedChapters(parsed)
+                }
+            }
+        } catch (e) {
+            console.error("Failed to parse progress", e)
         }
-        const savedAnswers = localStorage.getItem("ts-mastery-answers")
-        if (savedAnswers) {
-            setSavedCode(JSON.parse(savedAnswers))
+
+        try {
+            const savedAnswers = localStorage.getItem("ts-mastery-answers")
+            if (savedAnswers) {
+                const parsed = JSON.parse(savedAnswers)
+                if (typeof parsed === 'object' && parsed !== null) {
+                    setSavedCode(parsed)
+                }
+            }
+        } catch (e) {
+            console.error("Failed to parse answers", e)
         }
     }, [])
 
