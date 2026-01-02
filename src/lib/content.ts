@@ -203,46 +203,77 @@ export const courses: Course[] = [
                     message: "Déclarez la méthode `static void main`."
                 }
             }
-        ]
+            },
+    {
+        id: "java-se-basics",
+        title: "6. Java SE : Bases & Syntaxe",
+        content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 1)\n\n> 🎥 **[Vidéo Complète du Cours](https://drive.google.com/file/d/1ePwv-HzrtpJJsCknmF85hy4szhBJvyd4/view?usp=sharing)**\n\n## 1. Première App & Syntaxe\n- **Main**: Point d'entrée `public static void main`.\n- **Paquets**: Organisation du code.\n\n## 2. Variables & Types\nTypes primitifs clés : `int`, `double`, `boolean`, `char`. Attention aux plages de valeurs !\n\n## 3. Logique & Boucles\n- `if`, `else`, `switch`.\n- `while`, `do-while`, `for`, `for-each`.\n\n## 4. Méthodes & String\n- Une méthode contient du code réutilisable.\n- `String` est immuable. Utilisez `StringBuilder` pour concaténer beaucoup de texte.\n\n### Exercice\nDéclarez une variable `int count = 10;` et une `String name = \"Java\";`.",
+        validation: {
+            type: "regex",
+            value: "int\\s+count\\s*=\\s*10.*String\\s+name\\s*=\\s*\"Java\"",
+            message: "Déclarez `int count = 10;` et `String name = \"Java\";`."
+        }
     },
     {
-        id: "springboot",
-        title: "Spring Boot Starter",
-        description: "Créez des API REST puissantes rapidement avec Spring Boot.",
-        image: "/images/spring.png",
-        icon: Database,
-        modules: [
-            {
-                id: "spring-intro",
-                title: "Chapitre 1 : Votre première API",
-                content: "# Spring Boot\n\nLe framework Java n°1 pour le web.\n\n### Exercice\nAnnotez une classe avec `@SpringBootApplication`.",
-                validation: {
-                    type: "includes",
-                    value: "@SpringBootApplication",
-                    message: "Utilisez l'annotation @SpringBootApplication."
-                }
-            }
-        ]
+        id: "java-se-advanced",
+        title: "7. Java SE : Classes Avancées",
+        content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 2)\n\n## 7. Classes & Objets\nUne classe est un plan (blueprint). `Encapsulation` : Cachez vos données avec `private`.\nModificateurs : `public`, `protected`, `private`.\n\n## 8. Constructeurs\nCode exécuté au `new`. Utilisez `this()` pour appeler un autre constructeur.\n\n## 9. Membres Statiques\n`static` appartient à la classe, pas à l'instance.\n\n## 10. Annotations\n`@Override`, `@Deprecated`. Métadonnées pour le compilateur.\n\n### Exercice\nCréez un constructeur qui utilise `this.name = val;`.",
+        validation: {
+            type: "regex",
+            value: "this\\.[a-zA-Z0-9_]+\\s*=",
+            message: "Utilisez `this.champ = valeur` dans le constructeur."
+        }
     },
     {
-        id: "angular",
-        title: "Angular Architecture",
-        description: "Le framework Google pour des applications web scalables.",
-        image: "/images/angular.png",
-        icon: Smartphone, // Closest simple icon for App/Frontend
-        modules: [
-            {
-                id: "angular-intro",
-                title: "Chapitre 1 : Composants",
-                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
-                validation: {
-                    type: "includes",
-                    value: "@Component",
-                    message: "Utilisez le décorateur @Component."
-                }
-            }
-        ]
+        id: "java-se-streams",
+        title: "8. Java SE : Streams Modernes",
+        content: "# ☕ Cours 2: Fondamentaux de Java SE (Partie 3)\n\n## 12. Streams & Lambdas\nUne façon moderne de traiter les collections (depuis Java 8).\n\n### L'analogie de l'Usine\n- **Stream** : Le tapis roulant.\n- **Filter** : Contrôle qualité (garde ou jette).\n- **Map** : Transformation.\n- **Collect** : Emballage final.\n\n### Code Moderne\nPlus de boucles `for` complexes. Décrivez le **QUOI** (Declarative) plutôt que le **COMMENT** (Imperative).\n\n```java\nlist.stream()\n    .filter(n -> n % 2 == 0)\n    .collect(Collectors.toList());\n```\n\n### Exercice\nUtilisez `.stream().filter(...)` sur une liste.",
+        validation: {
+            type: "regex",
+            value: "\\.stream\\(\\)\\s*\\.filter\\(",
+            message: "Utilisez `.stream().filter(...)`."
+        }
     }
+]
+    },
+{
+    id: "springboot",
+        title: "Spring Boot Starter",
+            description: "Créez des API REST puissantes rapidement avec Spring Boot.",
+                image: "/images/spring.png",
+                    icon: Database,
+                        modules: [
+                            {
+                                id: "spring-intro",
+                                title: "Chapitre 1 : Votre première API",
+                                content: "# Spring Boot\n\nLe framework Java n°1 pour le web.\n\n### Exercice\nAnnotez une classe avec `@SpringBootApplication`.",
+                                validation: {
+                                    type: "includes",
+                                    value: "@SpringBootApplication",
+                                    message: "Utilisez l'annotation @SpringBootApplication."
+                                }
+                            }
+                        ]
+},
+{
+    id: "angular",
+        title: "Angular Architecture",
+            description: "Le framework Google pour des applications web scalables.",
+                image: "/images/angular.png",
+                    icon: Smartphone, // Closest simple icon for App/Frontend
+                        modules: [
+                            {
+                                id: "angular-intro",
+                                title: "Chapitre 1 : Composants",
+                                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
+                                validation: {
+                                    type: "includes",
+                                    value: "@Component",
+                                    message: "Utilisez le décorateur @Component."
+                                }
+                            }
+                        ]
+}
 ]
 
 // Compatibility export for existing code using 'modules'
