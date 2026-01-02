@@ -3,12 +3,19 @@
 import * as React from "react"
 import { WorkspaceLayout } from "@/components/workspace-layout"
 import { CourseViewer } from "@/components/course-viewer"
-import { CodeEditor } from "@/components/code-editor"
+import { WorkspaceLayout } from "@/components/workspace-layout"
+import { CourseViewer } from "@/components/course-viewer"
+import dynamic from "next/dynamic"
 import { ConsoleOutput } from "@/components/console-output"
 import { useProgress } from "@/hooks/use-progress"
 import { getCourseByModuleId } from "@/lib/content"
 import { useRouter } from "next/navigation"
 import confetti from "canvas-confetti"
+
+const CodeEditor = dynamic(
+    () => import("@/components/code-editor").then((mod) => mod.CodeEditor),
+    { ssr: false }
+)
 
 interface LearnCanvasProps {
     content: string
