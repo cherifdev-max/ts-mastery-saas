@@ -521,13 +521,187 @@ Utilisez \`authorizeHttpRequests\` dans une configuration.
         icon: Smartphone, // Closest simple icon for App/Frontend
         modules: [
             {
-                id: "angular-intro",
-                title: "Chapitre 1 : Composants",
-                content: "# Angular\n\nTout est composant.\n\n### Exercice\nUtilisez le décorateur `@Component`.",
+                id: "angular-components",
+                title: "1. Composants & Signals",
+                content: `
+# 🅰️ Angular : La Révolution Signals
+
+## Tout est Composant
+Une application Angular est un arbre de composants.
+
+### Component Standalone
+Plus besoin de NgModules !
+\`\`\`typescript
+@Component({
+  selector: 'app-user',
+  standalone: true,
+  template: \`<h1>Hello {{ name() }}</h1>\`,
+})
+export class UserComponent {
+  // Les Signals : la nouvelle ère de la réactivité
+  name = signal('Angular 18');
+
+  updateName() {
+    this.name.set('Simplicité');
+  }
+}
+\`\`\`
+
+### Exercice
+Créez un Signal avec une valeur initiale de 0.
+`,
                 validation: {
                     type: "includes",
-                    value: "@Component",
-                    message: "Utilisez le décorateur @Component."
+                    value: "signal(",
+                    message: "Utilisez la fonction signal() pour créer une variable réactive."
+                }
+            },
+            {
+                id: "angular-directives",
+                title: "2. Control Flow (@if, @for)",
+                content: `
+# 🔀 Le Nouveau Control Flow
+
+## Adieu *ngIf, *ngFor !
+Angular a une nouvelle syntaxe intégrée, plus rapide et plus lisible.
+
+### Condition @if
+\`\`\`html
+@if (isVisible()) {
+  <p>Coucou !</p>
+} @else {
+  <p>Caché...</p>
+}
+\`\`\`
+
+### Boucle @for
+\`\`\`html
+<ul>
+  @for (user of users(); track user.id) {
+    <li>{{ user.name }}</li>
+  } @empty {
+    <li>Aucun utilisateur</li>
+  }
+</ul>
+\`\`\`
+
+### Exercice
+Utilisez le bloc \`@if\` dans le template.
+`,
+                validation: {
+                    type: "includes",
+                    value: "@if",
+                    message: "Utilisez la syntaxe @if pour les conditions."
+                }
+            },
+            {
+                id: "angular-services",
+                title: "3. Services & Injection",
+                content: `
+# 💉 Injection de Dépendance
+
+## Partager la Logique
+Les composants gèrent la vue, les Services gèrent la donnée.
+
+### Créer un Service
+\`\`\`typescript
+@Injectable({
+  providedIn: 'root' // Disponible partout par défaut
+})
+export class UserService {
+  getUsers() {
+    return fetch('/api/users');
+  }
+}
+\`\`\`
+
+### Injecter le Service
+\`\`\`typescript
+export class UserComponent {
+  // Injection moderne avec inject()
+  private userService = inject(UserService);
+}
+\`\`\`
+
+### Exercice
+Créez une classe annotée avec \`@Injectable\`.
+`,
+                validation: {
+                    type: "includes",
+                    value: "@Injectable",
+                    message: "Annotez votre classe avec @Injectable."
+                }
+            },
+            {
+                id: "angular-routing",
+                title: "4. Routing & Navigation",
+                content: `
+# 🧭 Navigation
+
+## Configurer les Routes
+\`\`\`typescript
+export const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'user/:id', component: UserComponent },
+  { path: '**', redirectTo: 'home' }
+];
+\`\`\`
+
+## Naviguer
+Dans le HTML :
+\`\`\`html
+<a routerLink="/home">Accueil</a>
+\`\`\`
+
+Dans le code :
+\`\`\`typescript
+private router = inject(Router);
+goHome() {
+  this.router.navigate(['/home']);
+}
+\`\`\`
+
+### Exercice
+Utilisez \`routerLink\` dans une balise HTML.
+`,
+                validation: {
+                    type: "includes",
+                    value: "routerLink",
+                    message: "Utilisez la directive routerLink."
+                }
+            },
+            {
+                id: "angular-forms",
+                title: "5. Reactive Forms",
+                content: `
+# 📝 Formulaires Puissants
+
+## Reactive Forms
+Contrôle total sur la validation et l'état.
+
+\`\`\`typescript
+// FormControl pour un champ unique
+email = new FormControl('', [Validators.required, Validators.email]);
+
+// FormGroup pour un formulaire complet
+profile = new FormGroup({
+  firstName: new FormControl(''),
+  lastName: new FormControl(''),
+});
+\`\`\`
+
+Dans le template :
+\`\`\`html
+<input [formControl]="email" type="text" />
+\`\`\`
+
+### Exercice
+Instanciez un \`new FormControl\`.
+`,
+                validation: {
+                    type: "includes",
+                    value: "new FormControl",
+                    message: "Créez une instance de FormControl."
                 }
             }
         ]
