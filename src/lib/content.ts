@@ -24,9 +24,10 @@ export interface Course {
 
 // Reuse existing TS content
 const tsModules: Module[] = [
+    // 1. Introduction
     {
         id: "intro",
-        title: "Chapitre 1 : Introduction & Env",
+        title: "1.1 Introduction & Env",
         content: "# De Zéro à Héros : Introduction\n\nBienvenue dans votre parcours pour devenir un expert TypeScript.\n\n### Objectif du cours\nNous allons partir de zéro (aucune connaissance requise en TS) pour arriver à maîtriser les concepts les plus avancés du langage.\n\n### L'essentiel à retenir (Débutant) 💡\n- **TypeScript** n'est pas un nouveau langage, c'est du JavaScript avec des **types** en plus.\n- Il sert à attraper les erreurs **avant** d'exécuter le code.\n- Tout code JavaScript valide est aussi du code TypeScript valide.\n\n### Exercice\nDéclarez une variable `welcome` contenant la chaîne de caractères \"Hello TypeScript\".",
         validation: {
             type: "regex",
@@ -35,9 +36,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "intro-variables",
+        title: "1.2 Const vs Let",
+        content: "# Const vs Let\n\n### Pourquoi éviter `var` ?\n`var` a une portée globale ou de fonction assez floue. En TypeScript (et JS moderne), on préfére :\n- `const` : Pour ce qui ne change pas.\n- `let` : Pour ce qui peut changer.\n\n### Exercice\nDéclarez une constante `PI` avec la valeur `3.14`.",
+        validation: {
+            type: "regex",
+            value: "const\\s+PI\\s*=\\s*3\\.14",
+            message: "Déclarez une constante PI valant 3.14."
+        }
+    },
+    {
+        id: "intro-template",
+        title: "1.3 Template Literals",
+        content: "# Template Literals\n\n### Adieu la concaténation !\nFini les `\"Hello \" + name + \" !\"`. Utilisez les backticks ` ` ` pour insérer des variables directement.\n\nExemple : `` `Hello ${name}` ``\n\n### Exercice\nCréez une variable `greeting` qui utilise des backticks pour dire \"Hello World\".",
+        validation: {
+            type: "regex",
+            value: "(`.*`)|(backtick)", // Simplified check, regex for backticks is tricky in string literals
+            message: "Utilisez les backticks (`) pour créer votre chaîne."
+        }
+    },
+
+    // 2. Types
+    {
         id: "types",
-        title: "Chapitre 2 : Les types",
-        content: "# Les Fondations : Types de base\n\nPour devenir expert, il faut des bases solides. TypeScript est avant tout une question de *types*.\n\n### L'essentiel à retenir (Débutant) 💡\n- Les types de base sont : `string` (texte), `number` (nombre), `boolean` (vrai/faux).\n- Les tableaux s'écrivent `number[]` ou `string[]`.\n- Le type `any` désactive la sécurité de TypeScript. **Évitez-le** autant que possible !\n\n### Exercice\nCréez une variable `age` de type `number` valant `25`.",
+        title: "2.1 Les types de base",
+        content: "# Les Fondations : Types de base\n\nPour devenir expert, il faut des bases solides. TypeScript est avant tout une question de *types*.\n\n### L'essentiel à retenir (Débutant) 💡\n- Les types de base sont : `string` (texte), `number` (nombre), `boolean` (vrai/faux).\n- Le type `any` désactive la sécurité de TypeScript. **Évitez-le** autant que possible !\n\n### Exercice\nCréez une variable `age` de type `number` valant `25`.",
         validation: {
             type: "regex",
             value: "(const|let|var)\\s+age\\s*:\\s*number\\s*=\\s*25",
@@ -45,9 +68,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "types-boolean",
+        title: "2.2 Booléens",
+        content: "# Vrai ou Faux ?\n\nLe type `boolean` ne peut prendre que deux valeurs : `true` ou `false`.\n\n### Exercice\nDéclarez une variable `isActive` de type `boolean` initialisée à `true`.",
+        validation: {
+            type: "regex",
+            value: "(const|let|var)\\s+isActive\\s*:\\s*boolean\\s*=\\s*true",
+            message: "Déclarez 'isActive' de type boolean à true."
+        }
+    },
+    {
+        id: "types-arrays",
+        title: "2.3 Tableaux",
+        content: "# Listes et Tableaux\n\nPour déclarer une liste, ajoutez `[]` après le type.\n- `string[]` : Liste de textes.\n- `number[]` : Liste de nombres.\n\n### Exercice\nCréez un tableau `scores` contenant des nombres (ex: `[10, 20]`).",
+        validation: {
+            type: "regex",
+            value: "(const|let|var)\\s+scores\\s*:\\s*number\\[\\]\\s*=",
+            message: "Déclarez un tableau 'scores' de type number[]."
+        }
+    },
+
+    // 3. Functions
+    {
         id: "functions",
-        title: "Chapitre 3 : Fonctions",
-        content: "# Typage des Fonctions\n\n### L'essentiel à retenir (Débutant) 💡\n- On doit dire à TypeScript quel type d'arguments notre fonction attend.\n- On doit aussi dire ce que la fonction retourne (après les parenthèses).\n- Exemple : `function maFonction(arg: number): number { ... }`\n\n### Exercice\nÉcrivez une fonction `add` qui prend deux arguments `a` et `b` (tous deux de type `number`) et retourne un `number`.",
+        title: "3.1 Fonctions basiques",
+        content: "# Typage des Fonctions\n\n### L'essentiel à retenir (Débutant) 💡\n- On doit dire à TypeScript quel type d'arguments notre fonction attend.\n- On doit aussi dire ce que la fonction retourne (après les parenthèses).\n\n### Exercice\nÉcrivez une fonction `add` qui prend deux arguments `a` et `b` (tous deux de type `number`) et retourne un `number`.",
         validation: {
             type: "regex",
             value: "function\\s+add\\s*\\(\\s*a\\s*:\\s*number\\s*,\\s*b\\s*:\\s*number\\s*\\)\\s*:\\s*number",
@@ -55,9 +100,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "functions-optional",
+        title: "3.2 Paramètres Optionnels",
+        content: "# Arguments Optionnels\n\nParfois, un argument n'est pas obligatoire. On utilise `?`.\n\n```typescript\nfunction hello(name?: string) { ... }\n```\n\n### Exercice\nCréez une fonction `greet` avec un argument optionnel `name` (string).",
+        validation: {
+            type: "regex",
+            value: "function\\s+greet\\s*\\(\\s*name\\?\\s*:\\s*string",
+            message: "Utilisez 'name?: string' pour rendre l'argument optionnel."
+        }
+    },
+    {
+        id: "functions-return",
+        title: "3.3 Type de Retour (Void)",
+        content: "# Ne rien retourner\n\nSi une fonction ne retourne rien (elle fait juste un `console.log` par exemple), son type de retour est `void`.\n\n### Exercice\nCréez une fonction `logMessage` qui prend un `message` (string) et retourne `void`.",
+        validation: {
+            type: "regex",
+            value: "\\)\\s*:\\s*void",
+            message: "Le type de retour doit être précisé comme ': void'."
+        }
+    },
+
+    // 4. Classes
+    {
         id: "classes",
-        title: "Chapitre 4 : Classes",
-        content: "# Programmation Orientée Objet\n\n### L'essentiel à retenir (Débutant) 💡\n- Une **Classe** est un plan pour construire des objets.\n- `public` : Tout le monde peut toucher à cette propriété.\n- `private` : Seule la classe elle-même peut y toucher. C'est utile pour protéger vos données.\n\n### Exercice\nCréez une classe `User` avec une propriété publique `name` (string).",
+        title: "4.1 Classes & Propriétés",
+        content: "# Programmation Orientée Objet\n\n### L'essentiel à retenir (Débutant) 💡\n- Une **Classe** est un plan pour construire des objets.\n\n### Exercice\nCréez une classe `User` avec une propriété publique `name` (string).",
         validation: {
             type: "includes",
             value: "class User",
@@ -65,9 +132,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "classes-constructor",
+        title: "4.2 Le Constructeur",
+        content: "# Initialisation\n\nLe `constructor` est appelé quand on fait `new User()`. C'est là qu'on initialise les valeurs.\n\nAstuce TypeScript : Vous pouvez déclarer les propriétés directement dans les arguments du constructeur avec `public` ou `private` !\n\n### Exercice\nAjoutez un constructor à une classe `Car` qui prend une propriété `public model: string`.",
+        validation: {
+            type: "regex",
+            value: "constructor\\s*\\(\\s*public\\s+model\\s*:\\s*string\\s*\\)",
+            message: "Utilisez la syntaxe raccourcie 'constructor(public model: string)'."
+        }
+    },
+    {
+        id: "classes-methods",
+        title: "4.3 Méthodes",
+        content: "# Comportement\n\nLes objets ne font pas que stocker des données, ils agissent !\n\n### Exercice\nDans une classe `Counter`, ajoutez une méthode `increment()` qui ne retourne rien.",
+        validation: {
+            type: "regex",
+            value: "increment\\s*\\(\\s*\\)\\s*",
+            message: "Définissez une méthode increment()."
+        }
+    },
+
+    // 5. Interfaces
+    {
         id: "interfaces",
-        title: "Chapitre 5 : Interfaces",
-        content: "# Structurer la donnée\n\n### L'essentiel à retenir (Débutant) 💡\n- Une **Interface** est un contrat. Elle force un objet à avoir une certaine forme.\n- Si votre interface dit qu'il faut un `id`, vous ne pourrez pas créer d'objet sans `id`.\n- C'est la fonctionnalité la plus utilisée pour décrire vos données (utilisateurs, produits, etc.).\n\n### Exercice\nDéfinissez une interface `Product` avec un `id` (number) et un `name` (string).",
+        title: "5.1 Interfaces",
+        content: "# Structurer la donnée\n\n### L'essentiel à retenir (Débutant) 💡\n- Une **Interface** est un contrat.\n- C'est la fonctionnalité la plus utilisée pour décrire vos données.\n\n### Exercice\nDéfinissez une interface `Product` avec un `id` (number) et un `name` (string).",
         validation: {
             type: "includes",
             value: "interface Product",
@@ -75,9 +164,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "interfaces-optional",
+        title: "5.2 Propriétés Optionnelles",
+        content: "# Pas toujours là...\n\nComme pour les fonctions, les interfaces peuvent avoir des champs optionnels avec `?`.\n\n### Exercice\nDans une interface `Config`, ajoutez une propriété `debug?: boolean`.",
+        validation: {
+            type: "regex",
+            value: "debug\\?\\s*:\\s*boolean",
+            message: "Déclarez 'debug?: boolean'."
+        }
+    },
+    {
+        id: "interfaces-readonly",
+        title: "5.3 Readonly",
+        content: "# Touche pas à ça !\n\nVous pouvez empêcher la modification d'une propriété après sa création avec `readonly`.\n\n### Exercice\nCréez une interface `Account` avec un `readonly id: number`.",
+        validation: {
+            type: "regex",
+            value: "readonly\\s+id\\s*:\\s*number",
+            message: "Utilisez le modificateur 'readonly' sur 'id'."
+        }
+    },
+
+    // 6. Unions & Alias
+    {
         id: "unions",
-        title: "Chapitre 6 : Unions & Alias",
-        content: "# Unions & Aliases\n\n### L'essentiel à retenir (Débutant) 💡\n- L'**Union** (`|`) veut dire \"OU\". `string | number` = \"soit un texte, soit un nombre\".\n- L'**Alias** (`type`) permet de donner un nom sympa à un type compliqué.\n- Ex: `type ID = string | number;`\n\n### Exercice\nCréez un Type Alias `Status` qui peut être soit \"success\" soit \"error\".",
+        title: "6.1 Unions",
+        content: "# Unions & Aliases\n\n### L'essentiel à retenir (Débutant) 💡\n- L'**Union** (`|`) veut dire \"OU\". `string | number` = \"soit un texte, soit un nombre\".\n\n### Exercice\nCréez un Type Alias `Status` qui peut être soit \"success\" soit \"error\".",
         validation: {
             type: "regex",
             value: "type\\s+Status\\s*=\\s*(\"success\"\\s*\\|\\s*\"error\"|\"error\"\\s*\\|\\s*\"success\")",
@@ -85,9 +196,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "unions-literal",
+        title: "6.2 Types Littéraux",
+        content: "# Valeurs Exactes\n\nTypeScript permet d'utiliser des valeurs exactes comme types.\n\nExemple : `type Direction = \"North\" | \"South\";`\n\n### Exercice\nDéfinissez un type `YesNo` valant \"OUI\" ou \"NON\".",
+        validation: {
+            type: "regex",
+            value: "type\\s+YesNo\\s*=\\s*(\"OUI\"\\s*\\|\\s*\"NON\"|\"NON\"\\s*\\|\\s*\"OUI\")",
+            message: "Le type YesNo doit être 'OUI' | 'NON'."
+        }
+    },
+    {
+        id: "unions-alias",
+        title: "6.3 Alias d'Objets",
+        content: "# Nommer les choses\n\nPlutôt que de répéter `{ x: number, y: number }` partout, donnez-lui un nom !\n\n### Exercice\nCréez un type `Point` pour un objet ayant `x` et `y` (nombres).",
+        validation: {
+            type: "regex",
+            value: "type\\s+Point\\s*=\\s*\\{",
+            message: "Définissez un 'type Point = { ... }'."
+        }
+    },
+
+    // 7. Generics
+    {
         id: "generics",
-        title: "Chapitre 7 : Génériques",
-        content: "# Niveau Intermédiaire : Les Génériques\n\n### L'essentiel à retenir (Débutant) 💡\n- Les **Génériques** (`<T>`) permettent de créer du code qui s'adapte.\n- Imaginez une boîte qui peut contenir n'importe quoi, mais qui sait ce qu'elle contient.\n- C'est comme passer un *type* en argument d'une fonction.\n\n### Exercice\nCréez une fonction `identity<T>` qui retourne son argument.",
+        title: "7.1 Génériques",
+        content: "# Niveau Intermédiaire : Les Génériques\n\n### L'essentiel à retenir (Débutant) 💡\n- Les **Génériques** (`<T>`) permettent de créer du code qui s'adapte.\n\n### Exercice\nCréez une fonction `identity<T>` qui retourne son argument.",
         validation: {
             type: "includes",
             value: "<T>",
@@ -95,9 +228,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "generics-interface",
+        title: "7.2 Interfaces Génériques",
+        content: "# Boîtes Flexibles\n\nOn peut aussi rendre les interfaces flexibles.\n\n```typescript\ninterface Box<T> {\n  content: T;\n}\n```\n\n### Exercice\nDéfinissez une interface `Wrapper<T>` avec une propriété `value: T`.",
+        validation: {
+            type: "regex",
+            value: "interface\\s+Wrapper\\s*<\\s*T\\s*>",
+            message: "Créez l'interface Wrapper<T>."
+        }
+    },
+    {
+        id: "generics-array",
+        title: "7.3 Array<T>",
+        content: "# Tableaux Génériques\n\nSaviez-vous que `number[]` est un raccourci pour `Array<number>` ?\n\n### Exercice\nDéclarez une variable `names` en utilisant la syntaxe `Array<string>`.",
+        validation: {
+            type: "regex",
+            value: "Array\\s*<\\s*string\\s*>",
+            message: "Utilisez explicitement 'Array<string>'."
+        }
+    },
+
+    // 8. Namespaces
+    {
         id: "namespaces",
-        title: "Chapitre 8 : Namespace & d.ts",
-        content: "# Organisation et Écosystème\n\n### L'essentiel à retenir (Débutant) 💡\n- Les **Namespaces** servent à ranger votre code dans des \"casiers\" pour éviter les conflits de noms.\n- Les fichiers `.d.ts` sont des manuels d'instruction pour dire à TypeScript comment fonctionne une librairie JavaScript externe.\n\n### Exercice\nUtilisez le mot-clé `namespace` pour créer un espace `Utils`.",
+        title: "8.1 Namespaces",
+        content: "# Organisation\n\n### L'essentiel à retenir (Débutant) 💡\n- Les **Namespaces** servent à ranger votre code dans des \"casiers\" pour éviter les conflits de noms.\n\n### Exercice\nUtilisez le mot-clé `namespace` pour créer un espace `Utils`.",
         validation: {
             type: "includes",
             value: "namespace Utils",
@@ -105,9 +260,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "namespaces-nested",
+        title: "8.2 Imbrication",
+        content: "# Poupées Russes\n\nVous pouvez mettre des namespaces dans des namespaces.\n\n### Exercice\nDans un namespace `App`, créez un sous-namespace `Models` (n'oubliez pas `export`!).",
+        validation: {
+            type: "regex",
+            value: "export\\s+namespace\\s+Models",
+            message: "Utilisez 'export namespace Models' à l'intérieur."
+        }
+    },
+    {
+        id: "namespaces-export",
+        title: "8.3 Exporter le contenu",
+        content: "# Rendre accessible\n\nPour utiliser ce qu'il y a dans le namespace, il faut l'`export`er.\n\n### Exercice\nDans un namespace, exportez une fonction `init()`.",
+        validation: {
+            type: "regex",
+            value: "export\\s+function\\s+init",
+            message: "Exportez la fonction init."
+        }
+    },
+
+    // 9. Advanced Types
+    {
         id: "advanced-types",
-        title: "Chapitre 9 : Types Avancés",
-        content: "# Niveau Expert : Types Avancés\n\n### L'essentiel à retenir (Débutant) 💡\n- TypeScript permet de transformer des types existants.\n- `Partial<T>` est un outil magique qui prend un type et rend tous ses champs optionnels.\n- Il existe plein d'autres outils (\"Utility Types\") pour manipuler les types comme des Lego.\n\n### Exercice\nUtilisez `Partial<T>` pour créer un type qui rend toutes les propriétés optionnelles.",
+        title: "9.1 Partial",
+        content: "# Niveau Expert : Types Avancés\n\n### L'essentiel à retenir (Débutant) 💡\n- `Partial<T>` est un outil magique qui prend un type et rend tous ses champs optionnels.\n\n### Exercice\nUtilisez `Partial<T>` pour créer un type qui rend toutes les propriétés optionnelles.",
         validation: {
             type: "includes",
             value: "Partial<",
@@ -115,9 +292,31 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "advanced-pick",
+        title: "9.2 Pick",
+        content: "# Choisir ses batailles\n\n`Pick<T, K>` permet de créer un nouveau type en ne gardant que certaines clés de `T`.\n\n```typescript\ntype NameOnly = Pick<User, \"name\">;\n```\n\n### Exercice\nUtilisez `Pick` pour sélectionner une propriété 'id'.",
+        validation: {
+            type: "includes",
+            value: "Pick<",
+            message: "Utilisez l'utilitaire 'Pick'."
+        }
+    },
+    {
+        id: "advanced-omit",
+        title: "9.3 Omit",
+        content: "# Exclure\n\nL'inverse de Pick est `Omit<T, K>`. On prend tout... sauf ça.\n\n### Exercice\nUtilisez `Omit` pour retirer la propriété 'password'.",
+        validation: {
+            type: "includes",
+            value: "Omit<",
+            message: "Utilisez l'utilitaire 'Omit'."
+        }
+    },
+
+    // 10. Decorators
+    {
         id: "decorators",
-        title: "Chapitre 10 : Décorateurs",
-        content: "# Méta-programmation\n\n### L'essentiel à retenir (Débutant) 💡\n- Un **Décorateur** commence par `@` (ex: `@Component`).\n- C'est une fonction qui vient se \"coller\" sur une classe pour lui rajouter des fonctionnalités sans changer son code interne.\n- Très utilisé dans les frameworks comme Angular.\n\n### Exercice\nCréez une fonction `@Log` (simple fonction pour l'instant).",
+        title: "10.1 Décorateurs",
+        content: "# Méta-programmation\n\n### L'essentiel à retenir (Débutant) 💡\n- Un **Décorateur** commence par `@` (ex: `@Component`).\n\n### Exercice\nCréez une fonction `@Log` (simple fonction pour l'instant).",
         validation: {
             type: "includes",
             value: "function Log",
@@ -125,13 +324,55 @@ const tsModules: Module[] = [
         }
     },
     {
+        id: "decorators-class",
+        title: "10.2 Décorateur de Classe",
+        content: "# Sur une classe\n\nUn décorateur de classe reçoit le constructeur de la classe en argument.\n\n### Exercice\nAppliquez `@Sealed` sur une classe `Person`.",
+        validation: {
+            type: "regex",
+            value: "@Sealed\\s+class\\s+Person",
+            message: "Appliquez @Sealed juste avant 'class Person'."
+        }
+    },
+    {
+        id: "decorators-prop",
+        title: "10.3 Décorateur de Propriété",
+        content: "# Sur une propriété\n\nOn peut aussi décorer des champs.\n\n### Exercice\nAppliquez `@Required` sur une propriété `email`.",
+        validation: {
+            type: "regex",
+            value: "@Required\\s+email",
+            message: "Appliquez @Required sur 'email'."
+        }
+    },
+
+    // 11. Migration
+    {
         id: "migration",
-        title: "Chapitre 11 : Migration JS vers TS",
-        content: "# Le Test Ultime : Migration\n\n### L'essentiel à retenir (Débutant) 💡\n- Pas de panique ! On ne migre pas tout d'un coup.\n- Commencez par renommer les fichiers `.js` en `.ts`.\n- Corrigez les erreurs type `any` une par une.\n- C'est un processus progressif.\n\n### Conclusion\nVous êtes arrivé au bout !\n\nÉcrivez `// EXPERT` pour valider ce parcours.",
+        title: "11.1 Migration JS vers TS",
+        content: "# Le Test Ultime : Migration\n\n### L'essentiel à retenir (Débutant) 💡\n- Pas de panique ! On ne migre pas tout d'un coup.\n\n### Exercice\nÉcrivez `// EXPERT` pour valider.",
         validation: {
             type: "includes",
             value: "// EXPERT",
             message: "Écrivez le commentaire // EXPERT pour finir."
+        }
+    },
+    {
+        id: "migration-as",
+        title: "11.2 Type Assertion",
+        content: "# Forcez le destin\n\nParfois, vous en savez plus que le compilateur. Vous pouvez utiliser `as` pour forcer un type.\n\n```typescript\nconst input = document.getElementById('foo') as HTMLInputElement;\n```\n\n### Exercice\nUtilisez le mot-clé `as` pour caster une variable.",
+        validation: {
+            type: "regex",
+            value: "\\s+as\\s+",
+            message: "Utilisez le mot-clé 'as'."
+        }
+    },
+    {
+        id: "migration-any",
+        title: "11.3 Le joker Any",
+        content: "# Le mal nécessaire\n\nParfois, lors d'une migration, on ne sait pas. `any` permet de dire \"on verra plus tard\".\n\n### Exercice\nDéclarez une variable `mystery` de type `any`.",
+        validation: {
+            type: "regex",
+            value: "mystery\\s*:\\s*any",
+            message: "Déclarez 'mystery: any'."
         }
     }
 ]

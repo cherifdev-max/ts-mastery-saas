@@ -29,9 +29,62 @@ export function CodeEditor({
             if (model) {
                 const currentMarkers = monaco.editor.getModelMarkers({ resource: model.uri });
                 setMarkers(currentMarkers);
-                // Optional: Auto-report? Or just wait for button click.
             }
         });
+
+        // Register Java/Spring IntelliSense
+        // Note: In a real app, ensure this runs only once globally.
+        // For this demo, we permit "overwriting" or re-registering implicitly if possible,
+        // but monaco.languages.registerCompletionItemProvider returns a disposable.
+
+        if (language === 'java') {
+            monaco.languages.registerCompletionItemProvider('java', {
+                provideCompletionItems: (model: any, position: any) => {
+                    const suggestions = [
+                        // Spring Annotations
+                        { label: '@Service', kind: monaco.languages.CompletionItemKind.Class, insertText: '@Service', detail: 'Spring Service Component' },
+                        { label: '@RestController', kind: monaco.languages.CompletionItemKind.Class, insertText: '@RestController', detail: 'Spring Web Controller' },
+                        { label: '@Autowired', kind: monaco.languages.CompletionItemKind.Property, insertText: '@Autowired', detail: 'Dependency Injection' },
+                        { label: '@Component', kind: monaco.languages.CompletionItemKind.Class, insertText: '@Component', detail: 'Generic Spring Component' },
+                        { label: '@Bean', kind: monaco.languages.CompletionItemKind.Method, insertText: '@Bean', detail: 'Configuration Bean' },
+                        { label: '@Configuration', kind: monaco.languages.CompletionItemKind.Class, insertText: '@Configuration', detail: 'Spring Config Class' },
+                        { label: '@Entity', kind: monaco.languages.CompletionItemKind.Class, insertText: '@Entity', detail: 'JPA Entity' },
+                        { label: '@Id', kind: monaco.languages.CompletionItemKind.Property, insertText: '@Id', detail: 'JPA Primary Key' },
+                        { label: '@GeneratedValue', kind: monaco.languages.CompletionItemKind.Property, insertText: '@GeneratedValue', detail: 'JPA Auto ID' },
+                        { label: '@SpringBootTest', kind: monaco.languages.CompletionItemKind.Class, insertText: '@SpringBootTest', detail: 'Integration Test' },
+                        { label: '@Test', kind: monaco.languages.CompletionItemKind.Method, insertText: '@Test', detail: 'JUnit Test Method' },
+
+                        // Java/Spring Snippets
+                        {
+                            label: 'sysout',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertText: 'System.out.println(${1:message});',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            detail: 'Print to console'
+                        },
+                        {
+                            label: 'psvm',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertText: 'public static void main(String[] args) {\n\t${1}\n}',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            detail: 'Main method'
+                        },
+
+                        // Keywords
+                        { label: 'public', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'public ' },
+                        { label: 'private', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'private ' },
+                        { label: 'protected', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'protected ' },
+                        { label: 'class', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'class ' },
+                        { label: 'interface', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'interface ' },
+                        { label: 'extends', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'extends ' },
+                        { label: 'implements', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'implements ' },
+                        { label: 'return', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'return ' },
+                        { label: 'new', kind: monaco.languages.CompletionItemKind.Keyword, insertText: 'new ' },
+                    ];
+                    return { suggestions: suggestions };
+                }
+            });
+        }
     }
 
     const handleCheck = () => {
